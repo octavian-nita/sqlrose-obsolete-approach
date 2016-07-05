@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
 /**
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
@@ -42,6 +43,11 @@ public class CreateSampleDb {
 
         Class.forName("org.h2.Driver");
         try (Connection conn = DriverManager.getConnection(url)) {
+
+            try (Statement stmt = conn.createStatement()) {
+                stmt.execute("SET REFERENTIAL_INTEGRITY FALSE");
+            }
+
             for (String fileName : args) {
                 try (Reader script = new BufferedReader(new FileReader(fileName))) {
                     //noinspection unused
