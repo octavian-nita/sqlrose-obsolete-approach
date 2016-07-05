@@ -5,9 +5,9 @@ connections:
   # the application scope, no matter how many users, sessions etc.
   - name: sakila
     description: sqlrose sample database, based on MySQL's Sakila sample batabase (https://dev.mysql.com/doc/sakila/en/)
-    url:
-    username: sqlrose
-    password: sqlrose
+    url: jdbc:h2:./samples/db/sakila;MODE=MySQL
+    username:
+    password:
     # Alternative configuration properties:
     # The dbms protocol could include an optional subsubprotocol...
     #dbms: h2
