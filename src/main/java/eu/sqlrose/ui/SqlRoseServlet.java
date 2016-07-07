@@ -8,6 +8,7 @@ import com.vaadin.server.SessionInitEvent;
 import com.vaadin.server.SessionInitListener;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinServletService;
+import com.vaadin.server.VaadinSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -22,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
  * @version 1.0, Jul 05, 2016
  */
-@WebServlet(value = "/*", asyncSupported = true)
+@WebServlet(name = "sqlrose", value = "/*", asyncSupported = true)
 @VaadinServletConfiguration(productionMode = false, ui = SqlRoseUI.class)
 public class SqlRoseServlet extends VaadinServlet implements SessionInitListener, SessionDestroyListener {
 
@@ -61,22 +62,29 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
             }
 
             LOG.error(message, throwable);
+
+            // TODO: redirect to an error page?
+            // TODO: add 404 page
         }
     }
 
     @Override
     public void sessionInit(SessionInitEvent sessionInitEvent) throws ServiceException {
-        LOG.info("SqlRose session created");
+        VaadinSession session = sessionInitEvent.getSession();
 
-        // TODO: load server configuration...
-        // TODO: set up i18n...
-        // TODO: ensure local storage...
+        session.addRequestHandler(new LocaleSensitiveRequestHandler());
+
+        // TODO: load server configuration
+        // TODO: load local storage configuration
+
+        LOG.info("SqlRose session created");
     }
 
     @Override
     public void sessionDestroy(SessionDestroyEvent sessionDestroyEvent) {
-        LOG.info("SqlRose session destroyed");
 
-        // TODO: close / log remaining open DB connections...
+        // TODO: close remaining open DB connections
+
+        LOG.info("SqlRose session destroyed");
     }
 }

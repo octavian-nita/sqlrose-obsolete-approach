@@ -8,6 +8,8 @@ import com.vaadin.ui.VerticalLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static eu.sqlrose.ui.I18N.t;
+
 /**
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
  * @version 1.0, Jul 05, 2016
@@ -25,7 +27,7 @@ public class SqlRoseUI extends UI {
         content.setMargin(true);
         setContent(content);
 
-        content.addComponent(new Label("Hello SqlRose!"));
+        content.addComponent(new Label(t("hello")));
 
         LOG.info("SqlRose UI initialized");
     }
