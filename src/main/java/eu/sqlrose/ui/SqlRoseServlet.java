@@ -47,7 +47,9 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
     @Override
     public void service(ServletRequest request, ServletResponse response) {
         try {
+
             super.service(request, response);
+
         } catch (Throwable throwable) {
             String message = "An error has occurred";
 
@@ -63,8 +65,8 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
 
             LOG.error(message, throwable);
 
-            // TODO: redirect to an error page?
-            // TODO: add 404 page
+            // TODO: redirect to an error page
+            // TODO: add a 404 page
         }
     }
 
@@ -72,7 +74,7 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
     public void sessionInit(SessionInitEvent sessionInitEvent) throws ServiceException {
         VaadinSession session = sessionInitEvent.getSession();
 
-        session.addRequestHandler(new LocaleSensitiveRequestHandler());
+        session.addRequestHandler(new I18nRequestHandler());
 
         // TODO: load server configuration
         // TODO: load local storage configuration

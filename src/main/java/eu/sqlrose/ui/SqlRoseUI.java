@@ -8,7 +8,7 @@ import com.vaadin.ui.VerticalLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static eu.sqlrose.ui.I18N.t;
+import static eu.sqlrose.ui.I18n.t;
 
 /**
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
