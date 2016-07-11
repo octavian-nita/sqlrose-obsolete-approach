@@ -1,28 +1,45 @@
 package eu.sqlrose.core;
 
-import java.util.Properties;
+import eu.sqlrose.annotations.Serializable;
 
 /**
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
  * @version 1.0, Jul 08, 2016
  */
+@Serializable
 public class JdbcConnectionInfo extends ConnectionInfo {
 
     private static final long serialVersionUID = 1020160708L;
 
-    protected final String driverClass;
+    //protected final String driverClass;
+    //
+    //protected final String url;
+    //
+    //protected final Properties properties;
+    //
+    ///** The dbms protocol could include an optional subsubprotocol. */
+    //protected final String dbms;
+    //
+    //protected final String host;
+    //
+    //protected final String port;
+    //
+    //protected final String dbName;
 
-    protected final String url;
+    public JdbcConnectionInfo(String name, String description, String username, String password) {
+        super(name, description, username, password);
+    }
 
-    protected final Properties properties;
+    public JdbcConnectionInfo(String name, String description) {
+        super(name, description);
+    }
 
-    /** The dbms protocol could include an optional subsubprotocol. */
-    protected final String dbms;
+    public JdbcConnectionInfo(String name) {
+        super(name);
+    }
 
-    protected final String host;
+    public static void main(String[] args) {
 
-    protected final String port;
-
-    protected final String dbName;
-
+        System.out.println("Done!");
+    }
 }

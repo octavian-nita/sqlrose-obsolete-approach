@@ -1,5 +1,6 @@
 package eu.sqlrose.ui;
 
+import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.Label;
@@ -15,11 +16,12 @@ import static eu.sqlrose.ui.I18n.t;
  * @version 1.0, Jul 05, 2016
  */
 @Theme("valo")
+@PreserveOnRefresh
 public class SqlRoseUI extends UI {
 
     private static final long serialVersionUID = 1020160705L;
 
-    private final Logger LOG = LoggerFactory.getLogger(SqlRoseUI.class);
+    private final Logger log = LoggerFactory.getLogger(SqlRoseUI.class);
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -29,6 +31,6 @@ public class SqlRoseUI extends UI {
 
         content.addComponent(new Label(t("hello")));
 
-        LOG.info("SqlRose UI initialized");
+        log.info("SqlRose UI initialized");
     }
 }

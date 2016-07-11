@@ -9,6 +9,7 @@ import com.vaadin.server.SessionInitListener;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinServletService;
 import com.vaadin.server.VaadinSession;
+import eu.sqlrose.core.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -18,6 +19,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
+import java.nio.file.Paths;
 
 /**
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
@@ -33,7 +35,7 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
 
     private static final long serialVersionUID = 1020160705L;
 
-    private final Logger LOG = LoggerFactory.getLogger(SqlRoseServlet.class);
+    private final Logger log = LoggerFactory.getLogger(SqlRoseServlet.class);
 
     @Override
     protected void servletInitialized() throws ServletException {
@@ -63,7 +65,7 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
                 }
             }
 
-            LOG.error(message, throwable);
+            log.error(message, throwable);
 
             // TODO: redirect to an error page
             // TODO: add a 404 page
@@ -76,10 +78,11 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
 
         session.addRequestHandler(new I18nRequestHandler());
 
-        // TODO: load server configuration
-        // TODO: load local storage configuration
+        // Load server configuration
+        session.setAttribute(Environment.class, new Environment().loadConnections(Paths.get("connections.yml")));
+        // Load local storage configuration
 
-        LOG.info("SqlRose session created");
+        log.info("SqlRose session created");
     }
 
     @Override
@@ -87,6 +90,6 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
 
         // TODO: close remaining open DB connections
 
-        LOG.info("SqlRose session destroyed");
+        log.info("SqlRose session destroyed");
     }
 }
