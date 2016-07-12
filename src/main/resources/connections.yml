@@ -1,8 +1,7 @@
 # available connections information
 ---
 connections:
-  # A connection's name acts as ID, it must be unique within the
-  # application scope no matter how many users, sessions etc
+  # connections are identified by name
   - name: sakila
     description: sqlrose sample database, based on MySQL's Sakila sample database (https://dev.mysql.com/doc/sakila/en/)
     driver: org.h2.Driver

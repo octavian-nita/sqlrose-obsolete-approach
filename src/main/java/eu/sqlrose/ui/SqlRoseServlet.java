@@ -6,6 +6,7 @@ import com.vaadin.server.SessionDestroyEvent;
 import com.vaadin.server.SessionDestroyListener;
 import com.vaadin.server.SessionInitEvent;
 import com.vaadin.server.SessionInitListener;
+import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinServletService;
 import com.vaadin.server.VaadinSession;
@@ -19,7 +20,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
-import java.nio.file.Paths;
+import java.io.IOException;
 
 /**
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
@@ -33,7 +34,7 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
         SLF4JBridgeHandler.install();
     }
 
-    private final Logger log = LoggerFactory.getLogger(SqlRoseServlet.class);
+    protected final Logger log = LoggerFactory.getLogger(SqlRoseServlet.class);
 
     @Override
     protected void servletInitialized() throws ServletException {
@@ -73,11 +74,18 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
     @Override
     public void sessionInit(SessionInitEvent sessionInitEvent) throws ServiceException {
         VaadinSession session = sessionInitEvent.getSession();
+        VaadinService service = session.getService();
 
         session.addRequestHandler(new I18nRequestHandler());
 
         // Load server configuration
-        session.setAttribute(Environment.class, new Environment().loadConnections(Paths.get("connections.yml")));
+        try {
+            session
+                .setAttribute(Environment.class, new Environment().load(service.getClassLoader(), "connections.yml"));
+        } catch (IOException ioe) {
+            throw new ServiceException("cannot load the (server) environment", ioe);
+        }
+
         // Load local storage configuration
 
         log.info("SqlRose session created");

@@ -1,8 +1,13 @@
 package eu.sqlrose.core;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -16,37 +21,66 @@ import static java.util.Collections.unmodifiableList;
  */
 public class Environment implements Serializable {
 
-    private final Logger log = LoggerFactory.getLogger(Environment.class);
-
     protected final List<ConnectionInfo> availableConnections = new ArrayList<>();
 
+    @JsonProperty("connections")
     public List<ConnectionInfo> getAvailableConnections() { return unmodifiableList(availableConnections); }
 
-    public Environment loadConnections(Path path, Path... otherPaths) {
-        loadConnectionsFrom(path);
-        if (otherPaths != null) {
-            for (Path onePath : otherPaths) {
-                loadConnectionsFrom(onePath);
-            }
-        }
-        return this;
-    }
+    //
+    // TODO: extract environment loading into a factory?
+    //
 
-    protected void loadConnectionsFrom(Path path) {
-        throw new RuntimeException("Not yet implemented");
-    }
+    public Environment load(String content, String... otherContent) throws IOException {
+        final ObjectReader reader = reader();
 
-    public Environment loadConnections(String content, String... otherContent) {
-        loadConnectionsFrom(content);
+        reader.readValue(content);
         if (otherContent != null) {
-            for (String oneContent : otherContent) {
-                loadConnectionsFrom(oneContent);
+            for (String c : otherContent) {
+                reader.readValue(c);
             }
         }
+
         return this;
     }
 
-    protected void loadConnectionsFrom(String content) {
-        throw new RuntimeException("Not yet implemented");
+    public Environment load(Path path, Path... otherPaths) throws IOException {
+        final ObjectReader reader = reader();
+
+        reader.readValue(path.toFile());
+        if (otherPaths != null) {
+            for (Path p : otherPaths) {
+                reader.readValue(p.toFile());
+            }
+        }
+
+        return this;
+    }
+
+    public Environment load(ClassLoader loader, String resourceName, String... otherResourceNames) throws IOException {
+        final ObjectReader reader = reader();
+
+        load(reader, loader, resourceName);
+        if (otherResourceNames != null) {
+            for (String n : otherResourceNames) {
+                load(reader, loader, n);
+            }
+        }
+
+        return this;
+    }
+
+    protected ObjectReader reader() {
+        final ObjectMapper mapper = new YAMLMapper();
+        mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+        return mapper.readerForUpdating(this);
+    }
+
+    protected static <T> T load(ObjectReader reader, ClassLoader loader, String resourceName) throws IOException {
+        try (InputStream stream = loader.getResourceAsStream(resourceName)) {
+            if (stream != null) {
+                return reader.readValue(stream);
+            }
+        }
+        return null;
     }
 }
