@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
 
+import static java.util.Arrays.copyOf;
 import static org.apache.commons.lang3.Validate.notBlank;
 
 /**
@@ -12,8 +13,6 @@ import static org.apache.commons.lang3.Validate.notBlank;
  * @version 1.0, Jul 08, 2016
  */
 public abstract class ConnectionInfo implements Serializable {
-
-    private static final long serialVersionUID = 1020160708L;
 
     protected final String name;
 
@@ -23,17 +22,17 @@ public abstract class ConnectionInfo implements Serializable {
 
     protected final byte[] password;
 
-    protected ConnectionInfo(String name, String description, String username, String password) {
+    protected ConnectionInfo(String name, String description, String username, byte[] password) {
         this.name = notBlank(name, "the connection name cannot be null, empty or blank");
         this.description = description;
 
         this.username = username;
-        this.password = password == null ? null : password.getBytes();
+        this.password = password == null ? null : copyOf(password, password.length);
     }
 
-    protected ConnectionInfo(String name, String description) { this(name, description, null, null); }
-
-    protected ConnectionInfo(String name) { this(name, null, null, null); }
+    protected ConnectionInfo(String name, String description, String username, String password) {
+        this(name, description, username, password == null ? null : password.getBytes());
+    }
 
     public String getName() { return name; }
 

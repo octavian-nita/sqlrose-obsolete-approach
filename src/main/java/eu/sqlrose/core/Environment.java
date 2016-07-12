@@ -16,8 +16,6 @@ import static java.util.Collections.unmodifiableList;
  */
 public class Environment implements Serializable {
 
-    private static final long serialVersionUID = 1020160711L;
-
     private final Logger log = LoggerFactory.getLogger(Environment.class);
 
     protected final List<ConnectionInfo> availableConnections = new ArrayList<>();

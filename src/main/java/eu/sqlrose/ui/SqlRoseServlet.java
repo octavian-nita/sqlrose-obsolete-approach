@@ -33,8 +33,6 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
         SLF4JBridgeHandler.install();
     }
 
-    private static final long serialVersionUID = 1020160705L;
-
     private final Logger log = LoggerFactory.getLogger(SqlRoseServlet.class);
 
     @Override

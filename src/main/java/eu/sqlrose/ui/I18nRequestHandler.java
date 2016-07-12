@@ -17,8 +17,6 @@ import java.util.Locale;
  */
 public class I18nRequestHandler implements RequestHandler {
 
-    private static final long serialVersionUID = 1020160707L;
-
     public static final String LANGUAGE_TAG_PARAM = "lang";
 
     @Override

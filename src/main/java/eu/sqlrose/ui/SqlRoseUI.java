@@ -19,8 +19,6 @@ import static eu.sqlrose.ui.I18n.t;
 @PreserveOnRefresh
 public class SqlRoseUI extends UI {
 
-    private static final long serialVersionUID = 1020160705L;
-
     private final Logger log = LoggerFactory.getLogger(SqlRoseUI.class);
 
     @Override
