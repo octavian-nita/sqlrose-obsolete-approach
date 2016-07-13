@@ -29,7 +29,7 @@ public class SqlRoseUI extends UI {
 
         Environment env = VaadinSession.getCurrent().getAttribute(Environment.class);
 
-        content.addComponent(new Label(env.getAvailableConnections().size() + ""));
+        content.addComponent(new Label(env.getConnections().size() + ""));
 
         log.info("SqlRose UI initialized");
     }

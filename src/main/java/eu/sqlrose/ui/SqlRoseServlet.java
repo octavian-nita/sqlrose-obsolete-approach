@@ -80,8 +80,8 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
 
         // Load server configuration
         try {
-            session
-                .setAttribute(Environment.class, new Environment().load(service.getClassLoader(), "connections.yml"));
+            session.setAttribute(Environment.class,
+                                 new Environment().loadResources(service.getClassLoader(), "connections.yml"));
         } catch (IOException ioe) {
             throw new ServiceException("cannot load the (server) environment", ioe);
         }

@@ -23,7 +23,7 @@ public abstract class ConnectionInfo implements Serializable {
     protected final byte[] password;
 
     protected ConnectionInfo(String name, String description, String username, byte[] password) {
-        this.name = notBlank(name, "the connection name cannot be null, empty or blank");
+        this.name = notBlank(name, "the connection name cannot be null, empty or whitespace-only");
         this.description = description;
 
         this.username = username;

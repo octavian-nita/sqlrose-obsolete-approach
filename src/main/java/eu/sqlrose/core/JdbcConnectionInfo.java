@@ -20,7 +20,8 @@ public class JdbcConnectionInfo extends ConnectionInfo {
     protected JdbcConnectionInfo(Builder builder) {
         super(builder.name, builder.description, builder.username, builder.password);
 
-        this.driverClass = notBlank(builder.driverClass, "the driver class name cannot be null, empty or blank");
+        this.driverClass =
+            notBlank(builder.driverClass, "the driver class name cannot be null, empty or whitespace-only");
 
         // The db URL could be specified either wholly or by components (sub-protocol, host, port, db name, etc.):
         if (!isBlank(builder.url)) {
