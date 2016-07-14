@@ -66,8 +66,7 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
 
             log.error(message, throwable);
 
-            // TODO: redirect to an error page
-            // TODO: add a 404 page
+            // TODO: redirect to an error page with app restart option
         }
     }
 
@@ -81,7 +80,7 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
         // Load server configuration
         try {
             session.setAttribute(Environment.class,
-                                 new Environment().loadResources(service.getClassLoader(), "connections.yml"));
+                                 new Environment().load(service.getClassLoader().getResource("connections.yml")));
         } catch (IOException ioe) {
             throw new ServiceException("cannot load the (server) environment", ioe);
         }

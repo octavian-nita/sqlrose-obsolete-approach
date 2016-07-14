@@ -7,15 +7,15 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import static java.util.Collections.unmodifiableSet;
-import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.slf4j.LoggerFactory.getLogger;
+import static org.apache.commons.lang3.Validate.notBlank;
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
@@ -46,27 +46,26 @@ public class Environment implements Serializable {
     // Environment Loading
     //
 
-    public Environment loadContents(String content, String... otherContent) throws IOException {
+    public Environment load(String content, String... otherContent) throws IOException {
         ObjectReader reader = mapper().readerForUpdating(this);
 
-        load(reader, null, content);
+        reader.readValue(notBlank(content, "the environment string cannot be null, empty or whitespace-only"));
         if (otherContent != null) {
             for (String other : otherContent) {
-                load(reader, null, other);
+                reader.readValue(notBlank(other, "the environment string cannot be null, empty or whitespace-only"));
             }
         }
 
         return this;
     }
 
-    public Environment loadResources(ClassLoader loader, String resourceName, String... otherResourceNames)
-        throws IOException {
+    public Environment load(URL url, URL... otherURLs) throws IOException {
         ObjectReader reader = mapper().readerForUpdating(this);
 
-        load(reader, loader, resourceName);
-        if (otherResourceNames != null) {
-            for (String other : otherResourceNames) {
-                load(reader, loader, other);
+        reader.readValue(notNull(url, "the environment URL cannot be null"));
+        if (otherURLs != null) {
+            for (URL other : otherURLs) {
+                reader.readValue(notNull(other, "the environment URL cannot be null"));
             }
         }
 
@@ -76,33 +75,7 @@ public class Environment implements Serializable {
     private static ObjectMapper mapper() {
         ObjectMapper mapper = new YAMLMapper();
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-
-        SimpleModule module = new SimpleModule();
-        module.addDeserializer(ConnectionInfo.class, new ConnectionInfoDeserializer());
-
-        return mapper.registerModule(module);
-    }
-
-    private static <T> T load(ObjectReader reader, ClassLoader loader, String contentOrResourceName)
-        throws IOException {
-
-        if (isBlank(contentOrResourceName)) {
-            getLogger(Environment.class)
-                .warn("cannot load the environment from a null, empty or whitespace-only content or resource name...");
-            return null;
-        }
-
-        if (loader == null) {
-            return reader.readValue(contentOrResourceName);
-        }
-
-        try (InputStream input = loader.getResourceAsStream(contentOrResourceName)) {
-            if (input == null) {
-                getLogger(Environment.class)
-                    .warn("cannot load the environment from resource named {}...", contentOrResourceName);
-                return null;
-            }
-            return reader.readValue(input);
-        }
+        return mapper
+            .registerModule(new SimpleModule().addDeserializer(ConnectionInfo.class, new ConnectionInfoDeserializer()));
     }
 }

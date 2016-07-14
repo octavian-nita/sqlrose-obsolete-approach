@@ -14,8 +14,8 @@ connections:
     #host:
     #port:
     #dbname: ./samples/db/sakila
-    #props:
+    props:
     # The property names might be driver-specific...
-    #  MODE: MySQL
-    #  user:
-    #  password:
+      MODE: MySQL
+    # user:
+    # password:

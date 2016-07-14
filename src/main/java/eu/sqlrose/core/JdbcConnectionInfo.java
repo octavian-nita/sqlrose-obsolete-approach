@@ -28,12 +28,12 @@ public class JdbcConnectionInfo extends ConnectionInfo {
 
             this.url = builder.url;
 
-        } else if (!(isBlank(builder.dbms) || isBlank(builder.dbName))) {
+        } else if (!(isBlank(builder.dbms) || isBlank(builder.dbName)) && builder.port >= 0) {
 
             StringBuilder url = new StringBuilder("jdbc:").append(builder.dbms);
             if (!isBlank(builder.host)) {
                 url.append("//").append(builder.host);
-                if (!isBlank(builder.port)) {
+                if (builder.port > 0) {
                     url.append(":").append(builder.port);
                 }
                 url.append("/");
@@ -42,7 +42,8 @@ public class JdbcConnectionInfo extends ConnectionInfo {
 
         } else {
             throw new IllegalArgumentException(
-                "either the database URL or its protocol and name have to be specified (i.e. non-blank)");
+                "either the database URL or its protocol and name have to be specified (i.e. non-blank) and if " +
+                "specified, the port has to be a positive integer");
         }
 
         if (builder.properties != null && !builder.properties.isEmpty()) {
@@ -142,9 +143,9 @@ public class JdbcConnectionInfo extends ConnectionInfo {
             return this;
         }
 
-        private String port;
+        private int port;
 
-        public Builder port(String port) {
+        public Builder port(int port) {
             this.port = port;
             return this;
         }
