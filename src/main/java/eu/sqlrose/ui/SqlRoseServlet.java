@@ -20,7 +20,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 /**
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
@@ -77,15 +76,13 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
 
         session.addRequestHandler(new I18nRequestHandler());
 
-        // Load server configuration
-        try {
-            session.setAttribute(Environment.class,
-                                 new Environment().load(service.getClassLoader().getResource("connections.yml")));
-        } catch (IOException ioe) {
-            throw new ServiceException("cannot load the (server) environment", ioe);
-        }
+        // Loading configurations (server or local) does not throw any exceptions.
+        // Instead errors are logged and the (initially empty) environment doesn't get modified.
 
-        // Load local storage configuration
+        session.setAttribute(Environment.class,
+                             new Environment().load(service.getClassLoader().getResource("connections.yml")));
+
+        // TODO: Load local storage configuration
 
         log.info("SqlRose session created");
     }

@@ -1,24 +1,27 @@
 package eu.sqlrose.core;
 
+import java.util.Map;
 import java.util.Properties;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.Validate.notBlank;
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
  * @version 1.0, Jul 08, 2016
  */
-public class JdbcConnectionInfo extends ConnectionInfo {
+public class DriverBasedConnectionInfo extends ConnectionInfo {
 
-    protected final String driverClass;
+    private final String driverClass;
 
-    protected final String url;
+    private final String url;
 
-    protected final Properties properties;
+    private final Properties properties;
 
-    protected JdbcConnectionInfo(Builder builder) {
-        super(builder.name, builder.description, builder.username, builder.password);
+    protected DriverBasedConnectionInfo(Builder builder) {
+        super(notNull(builder, "the connection name cannot be null, empty or whitespace-only").name,
+              builder.description, builder.username, builder.password);
 
         this.driverClass =
             notBlank(builder.driverClass, "the driver class name cannot be null, empty or whitespace-only");
@@ -48,7 +51,7 @@ public class JdbcConnectionInfo extends ConnectionInfo {
 
         if (builder.properties != null && !builder.properties.isEmpty()) {
             this.properties = new Properties();
-            this.properties.putAll(properties);
+            this.properties.putAll(builder.properties);
         } else {
             this.properties = null;
         }
@@ -60,9 +63,23 @@ public class JdbcConnectionInfo extends ConnectionInfo {
 
     public Properties getProperties() { return properties; }
 
+    @Override
+    public String toString() {
+        StringBuilder builder =
+            new StringBuilder(super.toString()).append(' ').append(driverClass).append(' ').append(url);
+
+        if (properties != null && !properties.isEmpty()) {
+            for (Map.Entry<?, ?> entry : properties.entrySet()) {
+                builder.append(' ').append(entry.getKey()).append('=').append(entry.getValue());
+            }
+        }
+
+        return builder.toString();
+    }
+
     public static class Builder {
 
-        public JdbcConnectionInfo build() { return new JdbcConnectionInfo(this); }
+        public DriverBasedConnectionInfo build() { return new DriverBasedConnectionInfo(this); }
 
         private String name;
 

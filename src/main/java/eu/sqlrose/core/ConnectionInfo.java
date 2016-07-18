@@ -14,13 +14,13 @@ import static org.apache.commons.lang3.Validate.notBlank;
  */
 public abstract class ConnectionInfo implements Serializable {
 
-    protected final String name;
+    private final String name;
 
-    protected final String description;
+    private final String description;
 
-    protected final String username;
+    private final String username;
 
-    protected final byte[] password;
+    private final byte[] password;
 
     protected ConnectionInfo(String name, String description, String username, byte[] password) {
         this.name = notBlank(name, "the connection name cannot be null, empty or whitespace-only");
@@ -43,11 +43,35 @@ public abstract class ConnectionInfo implements Serializable {
     public String getPassword() { return password == null ? null : new String(password); }
 
     @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder(name);
+
+        if (description != null) {
+            builder.append('(');
+            if (description.length() < 51) {
+                builder.append(description);
+            } else {
+                builder.append(description.substring(0, 50)).append("...");
+            }
+            builder.append(')');
+        }
+
+        if (username != null) {
+            builder.append(' ').append(username);
+            if (password != null && password.length > 0) {
+                builder.append("/***");
+            }
+        }
+
+        return builder.toString();
+    }
+
+    @Override
     public boolean equals(Object that) {
-        return this == that || !(that == null || !(that instanceof ConnectionInfo)) &&
+        return this == that || that != null && that instanceof ConnectionInfo &&
                                new EqualsBuilder().append(name, ((ConnectionInfo) that).name).isEquals();
     }
 
     @Override
-    public int hashCode() { return new HashCodeBuilder(17, 37).append(name).toHashCode(); }
+    public int hashCode() { return new HashCodeBuilder().append(name).toHashCode(); }
 }
