@@ -17,11 +17,12 @@ import java.util.Optional;
 
 import static java.util.Collections.unmodifiableCollection;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * The {@link #load(String, String...) loading} {@link #load(URL, URL...) capabilities} provided by default never throw
  * any exceptions; in case of invalid input or any other loading error, they log and do not modify the currently loaded
- * environment.
+ * environment (i.e. <code>this</code>).
  *
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
  * @version 1.0, Jul 11, 2016
@@ -45,9 +46,15 @@ public class Environment implements Serializable {
 
     public ConnectionInfo getConnection(String name) { return connections.get(name); }
 
-    public ConnectionInfo add(ConnectionInfo connection) { return connections.put(connection.getName(), connection); }
+    public ConnectionInfo add(ConnectionInfo connection) {
+        return connections
+            .put(notNull(connection, "cannot add a null connection to the environment").getName(), connection);
+    }
 
-    public ConnectionInfo remove(ConnectionInfo connection) { return connections.remove(connection); }
+    public ConnectionInfo remove(ConnectionInfo connection) {
+        return connections
+            .remove(notNull(connection, "cannot remove a null connection from the environment").getName());
+    }
 
     //
     // Environment loading
