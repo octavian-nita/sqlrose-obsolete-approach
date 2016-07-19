@@ -1,0 +1,13 @@
+$v-font-family: 'Lato', 'Lora';
+$v-font-weight: 400;
+
+@import '../valo/valo';
+
+@mixin sqlrose {
+  @include valo;
+  $tx-sh-u: 22;
+
+  html {
+    text-shadow: 0 0 1px rgba($tx-sh-u, $tx-sh-u, $tx-sh-u, 0.2);
+  }
+}

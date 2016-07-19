@@ -59,7 +59,7 @@ public abstract class ConnectionInfo implements Serializable {
         if (username != null) {
             builder.append(' ').append(username);
             if (password != null && password.length > 0) {
-                builder.append("/***");
+                builder.append("/*****");
             }
         }
 

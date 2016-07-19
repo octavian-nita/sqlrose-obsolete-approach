@@ -19,4 +19,5 @@
 **/*.lck*
 **/*.lock*
 
+**/*.cache
 **/.DS_Store

@@ -2,7 +2,7 @@
 ---
 connections:
   # connections are identified by name
-  - name: sakila
+  - name: Sakila
     description: sqlrose sample database, based on MySQL's Sakila sample database (https://dev.mysql.com/doc/sakila/en/)
     driver: org.h2.Driver
     #url: jdbc:h2:./samples/db/sakila;MODE=MySQL

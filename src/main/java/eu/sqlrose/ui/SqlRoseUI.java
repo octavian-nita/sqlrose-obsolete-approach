@@ -2,6 +2,7 @@ package eu.sqlrose.ui;
 
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Label;
@@ -16,7 +17,7 @@ import org.slf4j.LoggerFactory;
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
  * @version 1.0, Jul 05, 2016
  */
-@Theme("valo")
+@Theme("sqlrose")
 @PreserveOnRefresh
 public class SqlRoseUI extends UI {
 
@@ -30,7 +31,12 @@ public class SqlRoseUI extends UI {
 
         Environment env = VaadinSession.getCurrent().getAttribute(Environment.class);
         for (ConnectionInfo connectionInfo : env.getConnections()) {
-            content.addComponent(new Label(connectionInfo.toString()));
+            Label l = new Label();
+
+            l.setIcon(FontAwesome.DATABASE);
+            l.setCaption(connectionInfo.toString());
+
+            content.addComponent(l);
         }
 
         log.info("SqlRose UI initialized");
