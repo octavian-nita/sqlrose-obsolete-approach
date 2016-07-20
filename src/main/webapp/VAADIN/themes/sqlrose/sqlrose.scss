@@ -5,9 +5,17 @@ $v-font-weight: 400;
 
 @mixin sqlrose {
   @include valo;
-  $tx-sh-u: 22;
+
+  // Colours:
+
+  $sh-r: 0;
+  $sh-g: $sh-r;
+  $sh-b: $sh-r;
+  $sh-a: 0.2;
+
+  // Selectors:
 
   html {
-    text-shadow: 0 0 1px rgba($tx-sh-u, $tx-sh-u, $tx-sh-u, 0.2);
+    text-shadow: 0 1px 0 rgba($sh-r, $sh-g, $sh-b, $sh-a);
   }
 }
