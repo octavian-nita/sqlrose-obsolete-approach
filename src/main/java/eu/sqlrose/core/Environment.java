@@ -29,31 +29,31 @@ import static org.apache.commons.lang3.Validate.notNull;
  */
 public class Environment implements Serializable {
 
-    private final Map<String, ConnectionInfo> connections = new LinkedHashMap<>();
+    private final Map<String, DataSource> dataSources = new LinkedHashMap<>();
 
-    public void setConnections(Collection<? extends ConnectionInfo> connections) {
-        this.connections.clear();
-        if (connections != null) {
-            for (ConnectionInfo connection : connections) {
-                if (connection != null) {
-                    this.connections.put(connection.getName(), connection);
+    public void setDataSources(Collection<? extends DataSource> dataSources) {
+        this.dataSources.clear();
+        if (dataSources != null) {
+            for (DataSource dataSource : dataSources) {
+                if (dataSource != null) {
+                    this.dataSources.put(dataSource.getName(), dataSource);
                 }
             }
         }
     }
 
-    public Collection<ConnectionInfo> getConnections() { return unmodifiableCollection(connections.values()); }
+    public Collection<DataSource> getDataSources() { return unmodifiableCollection(dataSources.values()); }
 
-    public ConnectionInfo getConnection(String name) { return connections.get(name); }
+    public DataSource getDataSource(String name) { return dataSources.get(name); }
 
-    public ConnectionInfo add(ConnectionInfo connection) {
-        return connections
-            .put(notNull(connection, "cannot add a null connection to the environment").getName(), connection);
+    public DataSource add(DataSource dataSource) {
+        return dataSources
+            .put(notNull(dataSource, "cannot add a null data source to the environment").getName(), dataSource);
     }
 
-    public ConnectionInfo remove(ConnectionInfo connection) {
-        return connections
-            .remove(notNull(connection, "cannot remove a null connection from the environment").getName());
+    public DataSource remove(DataSource dataSource) {
+        return dataSources
+            .remove(notNull(dataSource, "cannot remove a null data source from the environment").getName());
     }
 
     //
@@ -90,7 +90,7 @@ public class Environment implements Serializable {
         ObjectMapper mapper = new YAMLMapper();
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         return mapper
-            .registerModule(new SimpleModule().addDeserializer(ConnectionInfo.class, new ConnectionInfoDeserializer()));
+            .registerModule(new SimpleModule().addDeserializer(DataSource.class, new DataSourceDeserializer()));
     }
 
     protected <T> Optional<T> loadOne(ObjectReader reader, String content) {

@@ -80,7 +80,7 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
         // Instead errors are logged and the (initially empty) environment doesn't get modified.
 
         session.setAttribute(Environment.class,
-                             new Environment().load(service.getClassLoader().getResource("connections.yml")));
+                             new Environment().load(service.getClassLoader().getResource("data-sources.yml")));
 
         // TODO: Load local storage configuration
 

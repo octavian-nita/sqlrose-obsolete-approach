@@ -12,7 +12,7 @@ import static org.apache.commons.lang3.Validate.notBlank;
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
  * @version 1.0, Jul 08, 2016
  */
-public abstract class ConnectionInfo implements Serializable {
+public abstract class DataSource implements Serializable {
 
     private final String name;
 
@@ -22,15 +22,15 @@ public abstract class ConnectionInfo implements Serializable {
 
     private final byte[] password;
 
-    protected ConnectionInfo(String name, String description, String username, byte[] password) {
-        this.name = notBlank(name, "the connection name cannot be null, empty or whitespace-only");
+    protected DataSource(String name, String description, String username, byte[] password) {
+        this.name = notBlank(name, "the data source name cannot be null, empty or whitespace-only");
         this.description = description;
 
         this.username = username;
         this.password = password == null ? null : copyOf(password, password.length);
     }
 
-    protected ConnectionInfo(String name, String description, String username, String password) {
+    protected DataSource(String name, String description, String username, String password) {
         this(name, description, username, password == null ? null : password.getBytes());
     }
 
@@ -68,8 +68,8 @@ public abstract class ConnectionInfo implements Serializable {
 
     @Override
     public boolean equals(Object that) {
-        return this == that || that != null && that instanceof ConnectionInfo &&
-                               new EqualsBuilder().append(name, ((ConnectionInfo) that).name).isEquals();
+        return this == that || that != null && that instanceof DataSource &&
+                               new EqualsBuilder().append(name, ((DataSource) that).name).isEquals();
     }
 
     @Override

@@ -11,7 +11,7 @@ import static org.apache.commons.lang3.Validate.notNull;
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
  * @version 1.0, Jul 08, 2016
  */
-public class DriverBasedConnectionInfo extends ConnectionInfo {
+public class DriverBasedDataSource extends DataSource {
 
     private final String driverClass;
 
@@ -19,8 +19,8 @@ public class DriverBasedConnectionInfo extends ConnectionInfo {
 
     private final Properties properties;
 
-    protected DriverBasedConnectionInfo(Builder builder) {
-        super(notNull(builder, "the connection name cannot be null, empty or whitespace-only").name,
+    protected DriverBasedDataSource(Builder builder) {
+        super(notNull(builder, "the data source name cannot be null, empty or whitespace-only").name,
               builder.description, builder.username, builder.password);
 
         this.driverClass =
@@ -79,7 +79,7 @@ public class DriverBasedConnectionInfo extends ConnectionInfo {
 
     public static class Builder {
 
-        public DriverBasedConnectionInfo build() { return new DriverBasedConnectionInfo(this); }
+        public DriverBasedDataSource build() { return new DriverBasedDataSource(this); }
 
         private String name;
 

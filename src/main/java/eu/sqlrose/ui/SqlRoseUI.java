@@ -8,7 +8,7 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import eu.sqlrose.core.ConnectionInfo;
+import eu.sqlrose.core.DataSource;
 import eu.sqlrose.core.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,11 +30,11 @@ public class SqlRoseUI extends UI {
         setContent(content);
 
         Environment env = VaadinSession.getCurrent().getAttribute(Environment.class);
-        for (ConnectionInfo connectionInfo : env.getConnections()) {
+        for (DataSource dataSource : env.getDataSources()) {
             Label l = new Label();
 
             l.setIcon(FontAwesome.DATABASE);
-            l.setCaption(connectionInfo.toString());
+            l.setCaption(dataSource.toString());
 
             content.addComponent(l);
         }

@@ -1,6 +1,6 @@
 # available connections information
 ---
-connections:
+data_sources:
   # connections are identified by name
   - name: Sakila
     description: sqlrose sample database, based on MySQL's Sakila sample database (https://dev.mysql.com/doc/sakila/en/)
