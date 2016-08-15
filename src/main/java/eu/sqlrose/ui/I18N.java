@@ -1,40 +1,29 @@
 package eu.sqlrose.ui;
 
-import com.vaadin.server.VaadinSession;
-
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+
+import static org.apache.commons.lang3.StringUtils.appendIfMissing;
 
 /**
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
  * @version 1.0, Jul 07, 2016
  */
-public class I18n {
+public interface I18n {
 
-    public static final String TEXT_BUNDLE_BASE = "TextBundle";
-    public static final String TEXT_BUNDLE;
+    String TEXT_BUNDLE_BASE = "TextBundle";
 
-    static {
-        String bundlePrefix = System.getProperty("bundlePrefix", "locales/").trim();
-        if (bundlePrefix.length() > 0 && !bundlePrefix.endsWith("/")) {
-            bundlePrefix += "/";
-        }
+    String TEXT_BUNDLE = appendIfMissing(System.getProperty("bundlePrefix", "locales/").trim(), "/") + TEXT_BUNDLE_BASE;
 
-        TEXT_BUNDLE = bundlePrefix + TEXT_BUNDLE_BASE;
-    }
+    Locale getLocale();
 
-    public static String t(String key) {
+    default String t(String key) {
         if (key == null) {
             return "!?";
         }
 
-        VaadinSession session = VaadinSession.getCurrent();
-        if (session == null) {
-            return "!" + key;
-        }
-
-        Locale locale = session.getLocale();
+        Locale locale = getLocale();
         if (locale == null) {
             return "!" + key;
         }

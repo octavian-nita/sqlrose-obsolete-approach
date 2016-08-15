@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  */
 @Theme("sqlrose")
 @PreserveOnRefresh
-public class SqlRoseUI extends UI {
+public class SqlRoseUI extends UI implements I18n {
 
     protected final Logger log = LoggerFactory.getLogger(SqlRoseUI.class);
 
