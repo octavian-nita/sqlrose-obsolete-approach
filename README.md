@@ -9,4 +9,6 @@ Track development progress on [Trello](https://trello.com/b/41G7I2lW/sqlrose).
  * https://github.com/cytoscape/cytoscape.js
  * http://www.jointjs.com/download
  * https://jgraph.github.io/mxgraph/
- * [!not free!] https://www.nwoods.com/products/gojs/
+ * http://www.draw2d.org/draw2d/
+ * [±free] https://jsplumbtoolkit.com/
+ * [!free] https://www.nwoods.com/products/gojs/
