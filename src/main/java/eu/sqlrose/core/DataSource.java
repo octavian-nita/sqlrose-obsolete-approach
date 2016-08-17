@@ -20,9 +20,9 @@ public abstract class DataSource implements Serializable {
 
     private final String username;
 
-    private final byte[] password;
+    private final char[] password;
 
-    protected DataSource(String name, String description, String username, byte[] password) {
+    protected DataSource(String name, String description, String username, char[] password) {
         this.name = notBlank(name, "the data source name cannot be null, empty or whitespace-only");
         this.description = description;
 
@@ -31,7 +31,7 @@ public abstract class DataSource implements Serializable {
     }
 
     protected DataSource(String name, String description, String username, String password) {
-        this(name, description, username, password == null ? null : password.getBytes());
+        this(name, description, username, password == null ? null : password.toCharArray());
     }
 
     public String getName() { return name; }

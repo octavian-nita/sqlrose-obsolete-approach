@@ -102,10 +102,10 @@ public class DriverBasedDataSource extends DataSource {
             return this;
         }
 
-        private byte[] password;
+        private char[] password;
 
         public Builder password(String password) {
-            this.password = password == null ? null : password.getBytes();
+            this.password = password == null ? null : password.toCharArray();
             return this;
         }
 
