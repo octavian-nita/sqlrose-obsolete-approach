@@ -34,11 +34,8 @@ public class Environment implements Serializable {
     public void setDataSources(Collection<? extends DataSource> dataSources) {
         this.dataSources.clear();
         if (dataSources != null) {
-            for (DataSource dataSource : dataSources) {
-                if (dataSource != null) {
-                    this.dataSources.put(dataSource.getName(), dataSource);
-                }
-            }
+            dataSources.stream().filter(dataSource -> dataSource != null)
+                       .forEach(dataSource -> this.dataSources.put(dataSource.getName(), dataSource));
         }
     }
 
