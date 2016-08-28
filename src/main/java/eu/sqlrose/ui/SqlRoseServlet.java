@@ -35,6 +35,18 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
 
     protected final Logger log = LoggerFactory.getLogger(SqlRoseServlet.class);
 
+    /**
+     * Loading an environment (server and/or local) does not throw any exceptions (eventual errors are at least logged).
+     */
+    protected Environment loadEnvironment() {
+        final Environment environment = new Environment();
+
+        ClassLoader ldr = VaadinService.getCurrent().getClassLoader();
+        environment.load(ldr.getResource("data-sources.yml"), ldr.getResource("data-sources-private.yml"));
+
+        return environment;
+    }
+
     @Override
     protected void servletInitialized() throws ServletException {
         super.servletInitialized();
@@ -72,17 +84,9 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
     @Override
     public void sessionInit(SessionInitEvent sessionInitEvent) throws ServiceException {
         VaadinSession session = sessionInitEvent.getSession();
-        VaadinService service = session.getService();
 
         session.addRequestHandler(new I18nRequestHandler());
-
-        // Loading configurations (server or local) does not throw any exceptions.
-        // Instead errors are logged and the (initially empty) environment doesn't get modified.
-
-        session.setAttribute(Environment.class,
-                             new Environment().load(service.getClassLoader().getResource("sqlrose.yml")));
-
-        // TODO: Load local storage configuration
+        session.setAttribute(Environment.class, loadEnvironment());
 
         log.info("SqlRose session created");
     }

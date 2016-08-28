@@ -21,3 +21,6 @@
 
 **/*.cache
 **/.DS_Store
+
+**/*[._-]private.*
+**/*[._-]local.*

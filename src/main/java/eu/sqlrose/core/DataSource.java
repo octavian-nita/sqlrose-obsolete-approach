@@ -42,6 +42,12 @@ public abstract class DataSource implements Serializable {
 
     public String getPassword() { return password == null ? null : new String(password); }
 
+    public abstract void connect() throws CannotConnectToDataSourceException;
+
+    public abstract void disconnect();
+
+    public abstract boolean isConnected();
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder(name);
