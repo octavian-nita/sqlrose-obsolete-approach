@@ -1,9 +1,16 @@
 package eu.sqlrose.core;
 
+import eu.sqlrose.core.DataSourceConnectionException.CannotConnectToDataSource;
+import eu.sqlrose.core.DataSourceConnectionException.CannotDisconnectFromDataSource;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.Properties;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
@@ -62,6 +69,40 @@ public class DriverBasedDataSource extends DataSource {
     public String getUrl() { return url; }
 
     public Properties getProperties() { return properties; }
+
+    private Connection connection;
+
+    @Override
+    public boolean isConnected() { return connection == null; }
+
+    @Override
+    public void connect() throws CannotConnectToDataSource {
+        try {
+            Class.forName(getDriverClass());
+
+            if (isNotBlank(getUsername())) {
+                connection = DriverManager.getConnection(getUrl(), getUsername(), getPassword());
+            } else if (getProperties() != null) {
+                connection = DriverManager.getConnection(getUrl(), getProperties());
+            } else {
+                connection = DriverManager.getConnection(getUrl());
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            throw new CannotConnectToDataSource(this, ex);
+        }
+    }
+
+    @Override
+    public void disconnect() throws CannotDisconnectFromDataSource {
+        if (connection != null) {
+            try {
+                connection.close();
+                connection = null;
+            } catch (SQLException ex) {
+                throw new CannotDisconnectFromDataSource(this, ex);
+            }
+        }
+    }
 
     @Override
     public String toString() {

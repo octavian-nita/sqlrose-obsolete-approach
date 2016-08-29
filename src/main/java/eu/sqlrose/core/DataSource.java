@@ -1,5 +1,7 @@
 package eu.sqlrose.core;
 
+import eu.sqlrose.core.DataSourceConnectionException.CannotConnectToDataSource;
+import eu.sqlrose.core.DataSourceConnectionException.CannotDisconnectFromDataSource;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -42,11 +44,11 @@ public abstract class DataSource implements Serializable {
 
     public String getPassword() { return password == null ? null : new String(password); }
 
-    public abstract void connect() throws CannotConnectToDataSourceException;
-
-    public abstract void disconnect();
-
     public abstract boolean isConnected();
+
+    public abstract void connect() throws CannotConnectToDataSource;
+
+    public abstract void disconnect() throws CannotDisconnectFromDataSource;
 
     @Override
     public String toString() {
