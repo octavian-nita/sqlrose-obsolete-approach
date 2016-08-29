@@ -55,7 +55,7 @@ public abstract class DataSource implements Serializable {
         StringBuilder builder = new StringBuilder(name);
 
         if (description != null) {
-            builder.append('(');
+            builder.append(" (");
             if (description.length() < 51) {
                 builder.append(description);
             } else {
@@ -65,9 +65,9 @@ public abstract class DataSource implements Serializable {
         }
 
         if (username != null) {
-            builder.append(' ').append(username);
+            builder.append(' ').append(username).append('/');
             if (password != null && password.length > 0) {
-                builder.append("/*****");
+                builder.append("*****");
             }
         }
 

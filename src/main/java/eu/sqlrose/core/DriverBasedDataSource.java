@@ -2,6 +2,8 @@ package eu.sqlrose.core;
 
 import eu.sqlrose.core.DataSourceConnectionException.CannotConnectToDataSource;
 import eu.sqlrose.core.DataSourceConnectionException.CannotDisconnectFromDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,11 +22,13 @@ import static org.apache.commons.lang3.Validate.notNull;
  */
 public class DriverBasedDataSource extends DataSource {
 
-    private final String driverClass;
-
     private final String url;
 
+    private final String driverClass;
+
     private final Properties properties;
+
+    protected final Logger log = LoggerFactory.getLogger(DriverBasedDataSource.class);
 
     protected DriverBasedDataSource(Builder builder) {
         super(notNull(builder, "the data source name cannot be null, empty or whitespace-only").name,
@@ -64,9 +68,9 @@ public class DriverBasedDataSource extends DataSource {
         }
     }
 
-    public String getDriverClass() { return driverClass; }
-
     public String getUrl() { return url; }
+
+    public String getDriverClass() { return driverClass; }
 
     public Properties getProperties() { return properties; }
 
@@ -77,6 +81,12 @@ public class DriverBasedDataSource extends DataSource {
 
     @Override
     public void connect() throws CannotConnectToDataSource {
+        if (connection != null) {
+            log.warn("A connection to the " + getName() +
+                     " data source has already been established; ignoring connect request...");
+            return;
+        }
+
         try {
             Class.forName(getDriverClass());
 
@@ -107,7 +117,7 @@ public class DriverBasedDataSource extends DataSource {
     @Override
     public String toString() {
         StringBuilder builder =
-            new StringBuilder(super.toString()).append(' ').append(driverClass).append(' ').append(url);
+            new StringBuilder(super.toString()).append(" [").append(driverClass).append("] ").append(url);
 
         if (properties != null && !properties.isEmpty()) {
             for (Map.Entry<?, ?> entry : properties.entrySet()) {
@@ -167,18 +177,22 @@ public class DriverBasedDataSource extends DataSource {
         private Properties properties;
 
         public Builder properties(Properties properties) {
-            if (this.properties == null) {
-                this.properties = new Properties();
+            if (properties != null && !properties.isEmpty()) {
+                if (this.properties == null) {
+                    this.properties = new Properties();
+                }
+                this.properties.putAll(properties);
             }
-            this.properties.putAll(properties);
             return this;
         }
 
         public Builder property(String name, Object value) {
-            if (this.properties == null) {
-                this.properties = new Properties();
+            if (name != null) {
+                if (this.properties == null) {
+                    this.properties = new Properties();
+                }
+                this.properties.put(name, value);
             }
-            this.properties.put(name, value);
             return this;
         }
 
