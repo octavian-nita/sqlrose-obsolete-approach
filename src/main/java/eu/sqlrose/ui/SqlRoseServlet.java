@@ -42,7 +42,7 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
         final Environment environment = new Environment();
 
         ClassLoader ldr = VaadinService.getCurrent().getClassLoader();
-        environment.load(ldr.getResource("data-sources.yml"), ldr.getResource("data-sources-private.yml"));
+        environment.load(ldr.getResource("data-sources.yaml"), ldr.getResource("data-sources-private.yaml"));
 
         return environment;
     }
