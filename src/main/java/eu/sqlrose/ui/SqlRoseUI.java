@@ -29,12 +29,14 @@ public class SqlRoseUI extends UI implements I18n {
         content.setMargin(true);
         setContent(content);
 
+        content.addComponent(new Label(t("Databases")));
+
         Environment env = VaadinSession.getCurrent().getAttribute(Environment.class);
         for (DataSource dataSource : env.getDataSources()) {
             Label l = new Label();
 
             l.setIcon(FontAwesome.DATABASE);
-            l.setCaption(dataSource.toString());
+            l.setCaption(t(dataSource.toString()));
 
             content.addComponent(l);
         }

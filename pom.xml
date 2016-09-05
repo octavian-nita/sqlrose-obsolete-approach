@@ -224,6 +224,9 @@
         <version>9.4.0.M1</version>
         <configuration>
           <scanIntervalSeconds>2</scanIntervalSeconds>
+          <jvmArgs>
+            -Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n
+          </jvmArgs>
         </configuration>
       </plugin>
     </plugins>

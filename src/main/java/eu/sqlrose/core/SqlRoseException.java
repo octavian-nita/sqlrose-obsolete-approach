@@ -21,5 +21,8 @@ public class SqlRoseException extends Exception {
 
     public boolean isInternal() { return internal; }
 
-    public void setInternal(boolean internal) { this.internal = internal; }
+    public SqlRoseException setInternal(boolean internal) {
+        this.internal = internal;
+        return this;
+    }
 }

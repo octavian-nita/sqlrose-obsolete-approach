@@ -1,8 +1,8 @@
 package eu.sqlrose.core;
 
 /**
- * @author <a href="mailto:Octavian.NITA@ext.ec.europa.eu">Octavian NITA</a>
- * @version $Id$
+ * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
+ * @version 1.0, Sep 05, 2016
  */
 public enum E implements ErrorCode {
 
