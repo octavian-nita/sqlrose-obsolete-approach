@@ -1,7 +1,5 @@
 package eu.sqlrose.core;
 
-import eu.sqlrose.core.DataSourceConnectionException.CannotConnectToDataSource;
-import eu.sqlrose.core.DataSourceConnectionException.CannotDisconnectFromDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

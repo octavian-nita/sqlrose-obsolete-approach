@@ -1,7 +1,5 @@
 package eu.sqlrose.core;
 
-import eu.sqlrose.core.DataSourceConnectionException.CannotConnectToDataSource;
-import eu.sqlrose.core.DataSourceConnectionException.CannotDisconnectFromDataSource;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
