@@ -1,6 +1,7 @@
 package eu.sqlrose.core;
 
-import org.slf4j.Logger;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
@@ -9,16 +10,11 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.Properties;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.apache.commons.lang3.Validate.notBlank;
-import static org.apache.commons.lang3.Validate.notNull;
-
 /**
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
  * @version 1.0, Jul 08, 2016
  */
-public class DriverBasedDataSource extends DataSource {
+public class JdbcDataSource extends DataSource {
 
     private final String url;
 
@@ -26,35 +22,58 @@ public class DriverBasedDataSource extends DataSource {
 
     private final Properties properties;
 
-    protected final Logger log = LoggerFactory.getLogger(DriverBasedDataSource.class);
+    private final boolean urlPartsAvailable;
 
-    protected DriverBasedDataSource(Builder builder) {
-        super(notNull(builder, "the data source name cannot be null, empty or whitespace-only").name,
-              builder.description, builder.username, builder.password);
+    // The URL-part fields may be null / empty / 0 if the URL is provided directly.
+    // It is rather difficult to reliably parse any type of JDBC-specific URL - see
+    // for example: http://www.h2database.com/html/features.html#database_url
 
-        this.driverClass =
-            notBlank(builder.driverClass, "the driver class name cannot be null, empty or whitespace-only");
+    private final String dbms;
+
+    private final String host;
+
+    private final int port;
+
+    private final String dbName;
+
+    protected JdbcDataSource(Builder builder) {
+        super(Validate.notNull(builder, "The data source details cannot be null or empty").name, builder.description,
+              builder.username, builder.password);
+
+        this.driverClass = Validate
+            .notBlank(builder.driverClass, "The JDBC driver class name cannot be null, empty or whitespace-only");
 
         // The db URL could be specified either wholly or by components (sub-protocol, host, port, db name, etc.):
-        if (!isBlank(builder.url)) {
+        if (!StringUtils.isBlank(builder.url)) {
 
             this.url = builder.url;
+            this.dbms = "";
+            this.host = "";
+            this.port = 0;
+            this.dbName = "";
+            this.urlPartsAvailable = false;
 
-        } else if (!(isBlank(builder.dbms) || isBlank(builder.dbName)) && builder.port >= 0) {
+        } else if (!(StringUtils.isBlank(builder.dbms) || StringUtils.isBlank(builder.dbName)) && builder.port >= 0) {
 
             StringBuilder url = new StringBuilder("jdbc:").append(builder.dbms);
-            if (!isBlank(builder.host)) {
+            if (!StringUtils.isBlank(builder.host)) {
                 url.append("//").append(builder.host);
                 if (builder.port > 0) {
                     url.append(":").append(builder.port);
                 }
                 url.append("/");
             }
+
             this.url = url.append(":").append(builder.dbName).toString();
+            this.dbms = builder.dbms;
+            this.host = builder.host;
+            this.port = builder.port;
+            this.dbName = builder.dbName;
+            this.urlPartsAvailable = true;
 
         } else {
             throw new IllegalArgumentException(
-                "either the database URL or its protocol and name have to be specified (i.e. non-blank) and if " +
+                "Either the database URL or its protocol and name have to be specified (i.e. non-blank) and if " +
                 "specified, the port has to be a positive integer");
         }
 
@@ -70,9 +89,19 @@ public class DriverBasedDataSource extends DataSource {
 
     public String getDriverClass() { return driverClass; }
 
+    public boolean hasUrlPartsAvailable() { return urlPartsAvailable; }
+
+    public String getDbms() { return dbms; }
+
+    public String getHost() { return host; }
+
+    public int getPort() { return port; }
+
+    public String getDbName() { return dbName; }
+
     public Properties getProperties() { return properties; }
 
-    private Connection connection;
+    private transient Connection connection;
 
     @Override
     public boolean isConnected() { return connection == null; }
@@ -80,15 +109,16 @@ public class DriverBasedDataSource extends DataSource {
     @Override
     public void connect() throws CannotConnectToDataSource {
         if (connection != null) {
-            log.warn("A connection to the " + getName() +
-                     " data source has already been established; ignoring connect request...");
+            LoggerFactory.getLogger(getClass()).warn("A connection to the " + getName() +
+                                                     " data source has already been established;" +
+                                                     " ignoring request to connect...");
             return;
         }
 
         try {
             Class.forName(getDriverClass());
 
-            if (isNotBlank(getUsername())) {
+            if (StringUtils.isNotBlank(getUsername())) {
                 connection = DriverManager.getConnection(getUrl(), getUsername(), getPassword());
             } else if (getProperties() != null) {
                 connection = DriverManager.getConnection(getUrl(), getProperties());
@@ -128,7 +158,7 @@ public class DriverBasedDataSource extends DataSource {
 
     public static class Builder {
 
-        public DriverBasedDataSource build() { return new DriverBasedDataSource(this); }
+        public JdbcDataSource build() { return new JdbcDataSource(this); }
 
         private String name;
 

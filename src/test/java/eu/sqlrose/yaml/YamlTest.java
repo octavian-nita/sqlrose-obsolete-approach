@@ -19,8 +19,8 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 /**
- * @author <a href="mailto:Octavian.NITA@ext.ec.europa.eu">Octavian NITA</a>
- * @version $Id$
+ * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
+ * @version 1.0, Aug 31, 2016
  */
 public class YamlTest {
 
@@ -68,13 +68,13 @@ public class YamlTest {
                 assertNull(empty.get("name3"));
                 assertNull(empty.get("name4"));
             } else {
-                throw new RuntimeException("no test value ('proxy') defined in test fixture");
+                throw new RuntimeException("No test value ('proxy') defined in test fixture");
             }
 
             if (proxy != null) {
                 assertSame(proxy.get("http"), proxy.get("https"));
             } else {
-                throw new RuntimeException("no test value ('proxy') defined in test fixture");
+                throw new RuntimeException("No test value ('proxy') defined in test fixture");
             }
         }
     }

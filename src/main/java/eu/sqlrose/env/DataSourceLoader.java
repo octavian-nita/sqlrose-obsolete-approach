@@ -4,9 +4,10 @@ package eu.sqlrose.env;
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
  * @version 1.0, Jul 13, 2016
  */
-class DataSourceDeserializer /*extends JsonDeserializer<DataSource>*/ {
+class DataSourceLoader {
 
-//    static class InvalidDataSource extends JsonProcessingException {
+
+    //    static class InvalidDataSource extends JsonProcessingException {
 //
 //        InvalidDataSource(String message) { super(message); }
 //
@@ -15,42 +16,42 @@ class DataSourceDeserializer /*extends JsonDeserializer<DataSource>*/ {
 //
 //    @Override
 //    public DataSource deserialize(JsonParser parser, DeserializationContext context) throws InvalidDataSource {
-//        JsonNode ds;
+//        JsonNode core;
 //        try {
-//            ds = parser.getCodec().readTree(parser);
+//            core = parser.getCodec().readTree(parser);
 //        } catch (IOException ioe) {
 //            throw new InvalidDataSource("cannot parse the data source definition", ioe);
 //        }
 //
-//        String name = text(ds, "name");
+//        String name = text(core, "name");
 //        if (name == null) {
 //            throw new InvalidDataSource("no data source name has been specified");
 //        }
 //
-//        String driver = text(ds, "driver");
+//        String driver = text(core, "driver");
 //        if (driver == null) {
 //            throw new InvalidDataSource("no JDBC driver has been specified for data source '" + name +
 //                                        "' and currently only driver-based data sources are supported");
 //        }
 //
-//        String url = text(ds, "url");
+//        String url = text(core, "url");
 //        if (url != null) {
-//            return new DriverBasedDataSource.Builder().name(name).description(text(ds, "description"))
-//                                                      .username(text(ds, "username")).password(text(ds, "password"))
-//                                                      .driverClass(driver).url(url).properties(prop(ds, "props"))
+//            return new JdbcDataSource.Builder().name(name).description(text(core, "description"))
+//                                                      .username(text(core, "username")).password(text(core, "password"))
+//                                                      .driverClass(driver).url(url).properties(prop(core, "props"))
 //                                                      .build();
 //        }
 //
-//        String dbms = text(ds, "dbms");
-//        String dbName = text(ds, "dbname");
+//        String dbms = text(core, "dbms");
+//        String dbName = text(core, "dbname");
 //        if (dbms == null || dbName == null) {
 //            throw new InvalidDataSource("no JDBC URL or dbms and DB name have been specified...");
 //        }
 //
-//        return new DriverBasedDataSource.Builder().name(name).description(text(ds, "description"))
-//                                                  .username(text(ds, "username")).password(text(ds, "password"))
-//                                                  .driverClass(driver).dbms(dbms).host(text(ds, "host"))
-//                                                  .port(port(ds, "port")).dbName(dbName).properties(prop(ds, "props"))
+//        return new JdbcDataSource.Builder().name(name).description(text(core, "description"))
+//                                                  .username(text(core, "username")).password(text(core, "password"))
+//                                                  .driverClass(driver).dbms(dbms).host(text(core, "host"))
+//                                                  .port(port(core, "port")).dbName(dbName).properties(prop(core, "props"))
 //                                                  .build();
 //    }
 //

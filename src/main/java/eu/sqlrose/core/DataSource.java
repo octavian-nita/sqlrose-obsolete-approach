@@ -1,12 +1,11 @@
 package eu.sqlrose.core;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
-
-import static java.util.Arrays.copyOf;
-import static org.apache.commons.lang3.Validate.notBlank;
+import java.util.Arrays;
 
 /**
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
@@ -18,16 +17,16 @@ public abstract class DataSource implements Serializable {
 
     private final String description;
 
-    private final String username;
+    private final transient String username;
 
-    private final char[] password;
+    private final transient char[] password;
 
     protected DataSource(String name, String description, String username, char[] password) {
-        this.name = notBlank(name, "the data source name cannot be null, empty or whitespace-only");
+        this.name = Validate.notBlank(name, "The data source name cannot be null, empty or whitespace-only");
         this.description = description;
 
         this.username = username;
-        this.password = password == null ? null : copyOf(password, password.length);
+        this.password = password == null ? null : Arrays.copyOf(password, password.length);
     }
 
     protected DataSource(String name, String description, String username, String password) {
@@ -80,4 +79,65 @@ public abstract class DataSource implements Serializable {
 
     @Override
     public int hashCode() { return new HashCodeBuilder().append(name).toHashCode(); }
+
+    /**
+     * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
+     * @version 1.0, Sep 05, 2016
+     */
+    public enum ErrorCode implements eu.sqlrose.core.ErrorCode {
+
+        CANNOT_CONNECT,
+        CANNOT_DISCONNECT;
+
+        @Override
+        public String getCode() { return "E_DS_" + name(); }
+    }
+
+    /**
+     * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
+     * @version 1.0, Sep 05, 2016
+     */
+    public static class CannotConnectToDataSource extends SqlRoseException {
+
+        private DataSource dataSource;
+
+        public CannotConnectToDataSource(DataSource dataSource) {
+            super(ErrorCode.CANNOT_CONNECT);
+            this.dataSource = dataSource;
+        }
+
+        public CannotConnectToDataSource(DataSource dataSource, Throwable cause) {
+            super(ErrorCode.CANNOT_CONNECT, cause);
+            this.dataSource = dataSource;
+        }
+
+        @Override
+        public Object[] getDetails() {
+            return dataSource == null ? super.getDetails() : new Object[]{dataSource.getName()};
+        }
+    }
+
+    /**
+     * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
+     * @version 1.0, Sep 05, 2016
+     */
+    public static class CannotDisconnectFromDataSource extends SqlRoseException {
+
+        private DataSource dataSource;
+
+        public CannotDisconnectFromDataSource(DataSource dataSource) {
+            super(ErrorCode.CANNOT_DISCONNECT);
+            this.dataSource = dataSource;
+        }
+
+        public CannotDisconnectFromDataSource(DataSource dataSource, Throwable cause) {
+            super(ErrorCode.CANNOT_DISCONNECT, cause);
+            this.dataSource = dataSource;
+        }
+
+        @Override
+        public Object[] getDetails() {
+            return dataSource == null ? super.getDetails() : new Object[]{dataSource.getName()};
+        }
+    }
 }

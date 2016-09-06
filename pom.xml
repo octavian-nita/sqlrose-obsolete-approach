@@ -124,9 +124,14 @@
       <groupId>com.vaadin</groupId>
       <artifactId>vaadin-client-compiled</artifactId>
     </dependency>
-    <dependency>
+    <!--dependency>
       <groupId>com.vaadin</groupId>
       <artifactId>vaadin-themes</artifactId>
+    </dependency-->
+    <dependency>
+      <groupId>org.peimari</groupId>
+      <artifactId>dawn</artifactId>
+      <version>12</version>
     </dependency>
     <dependency>
       <groupId>com.vaadin</groupId>
