@@ -10,7 +10,7 @@
 
   <appender name="LOGOUT" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <encoder>
-      <pattern>%date %-5level [%thread] %logger{36} [%file:%line] %msg%n</pattern>
+      <pattern>%date %-5level [%thread] %logger{1} [%file:%line] %msg%n</pattern>
     </encoder>
 
     <file>sqlrose.log</file>

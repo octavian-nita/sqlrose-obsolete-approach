@@ -7,76 +7,101 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
+ * Test case illustrating basic {@link Yaml} usage in SqlRose.
+ *
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
  * @version 1.0, Aug 31, 2016
  */
 public class YamlTest {
 
-    protected Yaml yaml;
+    protected Yaml yamlUnderTest;
+
+    protected String yamlScalar;
+
+    protected String yamlListWithScalarInSecondPositionDoc;
 
     @Before
-    public void setUp() { yaml = new Yaml(); }
+    public void setUp() {
+        yamlUnderTest = new Yaml();
+        yamlScalar = "The Dagger 'Nimthanc'";
+        yamlListWithScalarInSecondPositionDoc =
+            doc("# YAML", "- The Dagger 'Narthanc'", "-   " + yamlScalar + " ", "- The Dagger 'Dethanc'");
+    }
 
     @After
-    public void tearDown() { yaml = null; }
-
-    @Test
-    public void basicLoading() {
-        String val = "The Dagger 'Nimthanc'";
-        String src = doc("# YAML", "- The Dagger 'Narthanc'", "-   " + val + " ", "- The Dagger 'Dethanc'");
-
-        Object doc = yaml.loadAll(src);
-        assertTrue("Yaml#loadAll() expected to return a List for source " + src, doc instanceof List);
-
-        List lov = (List) doc;
-        assertEquals(3, lov.size());
-
-        assertEquals(val, lov.get(1));
+    public void tearDown() {
+        yamlUnderTest = null;
+        yamlScalar = null;
+        yamlListWithScalarInSecondPositionDoc = null;
     }
 
     @Test
-    public void advancedLoading() throws IOException {
+    public void GIVEN_EmptyDocument_WHEN_LoadAllCalled_THEN_ReturnedIterableHasNoRoots() {
+        Iterable<?> roots = yamlUnderTest.loadAll("  ");
+        assertNotNull(roots);
 
-        try (Reader src = new FileReader("yaml-test.yaml")) {
-            Map<?, ?> empty = null;
-            Map<?, ?> proxy = null;
+        Iterator<?> it = roots.iterator();
+        assertFalse(it.hasNext());
+    }
 
-            for (Object doc : yaml.loadAll(src)) {
-                if (doc instanceof Map && ((Map) doc).get("empty") != null) {
-                    empty = (Map) ((Map) doc).get("empty");
-                }
-                if (doc instanceof Map && ((Map) doc).get("proxy") != null) {
-                    proxy = (Map) ((Map) doc).get("proxy");
-                }
-            }
+    @Test
+    public void GIVEN_SingleDocument_WHEN_LoadAllCalled_THEN_ReturnedIterableHasExactlyOneRoot() {
+        Iterable<?> roots = yamlUnderTest.loadAll(yamlListWithScalarInSecondPositionDoc);
+        assertNotNull(roots);
 
-            if (empty != null) {
-                assertEquals("value1", empty.get("name1"));
-                assertEquals("", empty.get("name2"));
-                assertNull(empty.get("name3"));
-                assertNull(empty.get("name4"));
-            } else {
-                throw new RuntimeException("No test value ('proxy') defined in test fixture");
-            }
+        Iterator<?> it = roots.iterator();
+        assertTrue(it.hasNext());
 
-            if (proxy != null) {
-                assertSame(proxy.get("http"), proxy.get("https"));
-            } else {
-                throw new RuntimeException("No test value ('proxy') defined in test fixture");
-            }
-        }
+        Object root = it.next();
+        assertNotNull(root);
+
+        assertFalse(it.hasNext());
+    }
+
+    @Test
+    public void GIVEN_ListWithScalar_WHEN_LoadAllCalled_THEN_ReturnedValueIsInstanceOfListContainingScalar() {
+        Object root = yamlUnderTest.loadAll(yamlListWithScalarInSecondPositionDoc).iterator().next();
+        assertTrue(root instanceof List);
+        assertTrue(((List) root).contains(yamlScalar));
+    }
+
+    @Test
+    public void GIVEN_MultipleComplexDocuments_WHEN_LoadAllCalled_THEN_ReturnStructureAsExpected() throws IOException {
+
+        String complexYamlContent = joln(//@fmt:off
+            "---",
+            "empty:",
+            "  name1:   value1",
+            "  name2: \"\"",
+            "  name3:",
+            "",
+            "---",
+            "proxy:",
+            "  http:   &http",
+            "    host: 192.168.1.1",
+            "    port: 8023",
+            "    user: user",
+            "    pass: pass",
+            "  https:  *http");//@fmt:on
+
+        Iterator<?> it = yamlUnderTest.loadAll(complexYamlContent).iterator();
+
+        Map<?, ?> empty = (Map) ((Map) it.next()).get("empty");
+        assertEquals("value1", empty.get("name1"));
+        assertEquals("", empty.get("name2"));
+        assertNull(empty.get("name3"));
+        assertNull(empty.get("name4"));
+
+        Map<?, ?> proxy = (Map) ((Map) it.next()).get("proxy");
+        assertSame(proxy.get("http"), proxy.get("https"));
     }
 
     protected static final String NL = System.getProperty("line.separator", "\n");

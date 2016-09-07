@@ -3,16 +3,13 @@ package eu.sqlrose.env;
 import eu.sqlrose.core.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.Serializable;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
-
-import static java.util.Collections.unmodifiableCollection;
 
 /**
  * The {@link #load(String, String...) loading} {@link #load(URL, URL...) capabilities} provided by default never throw
@@ -24,7 +21,7 @@ import static java.util.Collections.unmodifiableCollection;
  */
 public class Environment implements Serializable {
 
-    protected final Logger log = LoggerFactory.getLogger(Environment.class);
+    protected final transient Logger log = LoggerFactory.getLogger(Environment.class);
 
     private final Map<String, DataSource> dataSources = new LinkedHashMap<>();
 
@@ -35,91 +32,33 @@ public class Environment implements Serializable {
         }
     }
 
-    public Collection<DataSource> getDataSources() { return unmodifiableCollection(dataSources.values()); }
+    public Collection<DataSource> getDataSources() { return Collections.unmodifiableCollection(dataSources.values()); }
 
     public DataSource getDataSource(String name) { return dataSources.get(name); }
 
-    public DataSource add(DataSource dataSource) {
+    public void add(DataSource dataSource) {
         if (dataSource == null) {
             log.error("Cannot add a null data source to the environment; ignoring...");
-            return null;
         } else {
-            return dataSources.put(dataSource.getName(), dataSource);
+            dataSources.put(dataSource.getName(), dataSource);
         }
     }
 
-    public DataSource remove(DataSource dataSource) {
-        return dataSource == null ? null : dataSources.remove(dataSource.getName());
+    public void remove(DataSource dataSource) {
+        if (dataSource == null) {
+            log.error("Cannot remove a null data source from the environment; ignoring...");
+        } else {
+            dataSources.remove(dataSource.getName());
+        }
     }
 
     //
-    // Environment loading
+    // Convenient environment loading
     //
 
     public Environment load(String content, String... otherContent) {
-        //        ObjectReader reader = mapper().readerForUpdating(this);
-        //
-        //        loadOne(reader, content);
-        //        if (otherContent != null) {
-        //            for (String other : otherContent) {
-        //                loadOne(reader, other);
-        //            }
-        //        }
-        //
-        return this;
+        return new EnvironmentLoader().load(this, content, otherContent);
     }
 
-    public Environment load(URL url, URL... otherURLs) {
-        final Yaml yaml = new Yaml();
-
-        loadOne(yaml, url);
-        if (otherURLs != null) {
-            for (URL other : otherURLs) {
-                loadOne(yaml, other);
-            }
-        }
-
-        return this;
-    }
-
-    protected <T> Optional<T> loadOne(/*ObjectReader reader,*/ String content) {
-        //        if (reader == null) {
-        //            log.debug("no reader to load the environment string has been provided; skip loading...");
-        //            return Optional.empty();
-        //        }
-        //
-        //        if (isBlank(content)) {
-        //            log.warn("cannot load a null, empty or whitespace-only environment string; skip loading...");
-        //            return Optional.empty();
-        //        }
-        //
-        //        try {
-        //            return Optional.ofNullable(reader.readValue(content));
-        //        } catch (Throwable throwable) {
-        //            log.error("cannot load the environment string '" + content.substring(0, Math.min(content.length
-        // (), 51)) +
-        //                      "...' (see details below); skip loading...", throwable);
-        //            return Optional.empty();
-        //        }
-        return Optional.empty();
-    }
-
-    protected Environment loadOne(Yaml yaml, URL url) {
-        if (yaml == null) {
-            log.debug("No YAML instance has been provided to load the environment from a URL; ignoring...");
-            return this;
-        }
-
-        if (url == null) {
-            log.warn("Cannot load the environment from a null URL; ignoring...");
-            return this;
-        }
-
-        try {
-            yaml.loadAll(url.openStream());
-        } catch (Throwable throwable) {
-            log.error("Cannot load the environment from URL " + url + " (see details below); ignoring...", throwable);
-        }
-        return this;
-    }
+    public Environment load(URL url, URL... otherURLs) { return new EnvironmentLoader().load(this, url, otherURLs); }
 }

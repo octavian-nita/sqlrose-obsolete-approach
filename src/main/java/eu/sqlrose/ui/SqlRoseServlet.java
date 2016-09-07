@@ -1,15 +1,7 @@
 package eu.sqlrose.ui;
 
 import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.server.ServiceException;
-import com.vaadin.server.SessionDestroyEvent;
-import com.vaadin.server.SessionDestroyListener;
-import com.vaadin.server.SessionInitEvent;
-import com.vaadin.server.SessionInitListener;
-import com.vaadin.server.VaadinService;
-import com.vaadin.server.VaadinServlet;
-import com.vaadin.server.VaadinServletService;
-import com.vaadin.server.VaadinSession;
+import com.vaadin.server.*;
 import eu.sqlrose.env.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,12 +31,13 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
      * Loading an environment (server and/or local) does not throw any exceptions (eventual errors are at least logged).
      */
     protected Environment loadEnvironment() {
-        final Environment environment = new Environment();
+        final Environment env = new Environment();
 
         ClassLoader ldr = VaadinService.getCurrent().getClassLoader();
-        environment.load(ldr.getResource("data-sources.yaml"), ldr.getResource("data-sources-private.yaml"));
+        env.load(ldr.getResource("config.yaml"), ldr.getResource("config-private.yaml"),
+                 ldr.getResource("data-sources.yaml"), ldr.getResource("data-sources-private.yaml"));
 
-        return environment;
+        return env;
     }
 
     @Override
@@ -69,9 +62,9 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
                 HttpServletRequest httpRequest = (HttpServletRequest) request;
                 message += " while servicing request " + httpRequest.getRequestURI();
 
-                String queryString = httpRequest.getQueryString();
-                if (queryString != null && (queryString = queryString.trim()).length() > 0) {
-                    message += "?" + queryString;
+                String qs = httpRequest.getQueryString();
+                if (qs != null && (qs = qs.trim()).length() > 0) {
+                    message += "?" + qs;
                 }
             }
 
