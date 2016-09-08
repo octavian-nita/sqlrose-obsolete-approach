@@ -12,6 +12,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
+import java.net.URL;
 
 /**
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
@@ -26,19 +27,6 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
     }
 
     protected final Logger log = LoggerFactory.getLogger(SqlRoseServlet.class);
-
-    /**
-     * Loading an environment (server and/or local) does not throw any exceptions (eventual errors are at least logged).
-     */
-    protected Environment loadEnvironment() {
-        final Environment env = new Environment();
-
-        ClassLoader ldr = VaadinService.getCurrent().getClassLoader();
-        env.load(ldr.getResource("config.yaml"), ldr.getResource("config-private.yaml"),
-                 ldr.getResource("data-sources.yaml"), ldr.getResource("data-sources-private.yaml"));
-
-        return env;
-    }
 
     @Override
     protected void servletInitialized() throws ServletException {
@@ -78,16 +66,48 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
     public void sessionInit(SessionInitEvent sessionInitEvent) throws ServiceException {
         VaadinSession session = sessionInitEvent.getSession();
 
-        session.addRequestHandler(new I18nRequestHandler());
-        session.setAttribute(Environment.class, loadEnvironment());
+        Environment env = loadEnvironment();
+        // TODO: perform eventual initial configuration based on the loaded environment
+        session.setAttribute(Environment.class, env);
 
-        log.info("SqlRose session created");
+        session.addRequestHandler(new I18nRequestHandler());
+
+        log.info("SqlRose session initialized");
+    }
+
+    /**
+     * Loading an environment (server and/or local) does not throw any exceptions (eventual errors are at least logged).
+     */
+    protected Environment loadEnvironment() {
+        final Environment env = new Environment();
+
+        ClassLoader ldr = VaadinService.getCurrent().getClassLoader();
+        for (String res : new String[]{//@fmt:off
+
+            // TODO: consider splitting the environment into server-wide and user-specific
+
+            "config.yaml",
+            "config-private.yaml",
+            "data-sources.yaml",
+            "data-sources-private.yaml" //@fmt:on
+
+        }) {
+            URL url = ldr.getResource(res);
+            if (url == null) {
+                log.info("Configuration resource " + res + " not found; ignoring...");
+            } else {
+                log.info("Loading the environment from configuration resource " + res + "...");
+                env.load(url);
+            }
+        }
+
+        return env;
     }
 
     @Override
     public void sessionDestroy(SessionDestroyEvent sessionDestroyEvent) {
 
-        // TODO: close remaining open DB connections
+        // TODO: close remaining open DB connections, ensure environment changes get persisted
 
         log.info("SqlRose session destroyed");
     }

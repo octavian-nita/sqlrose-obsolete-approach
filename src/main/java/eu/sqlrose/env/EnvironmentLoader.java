@@ -32,7 +32,7 @@ class EnvironmentLoader {
     }
 
     Environment loadOne(Environment target, String content, Yaml yaml) {
-        if (validate(target, content, yaml)) {
+        if (validateForLoad(target, content, yaml)) {
             try {
                 for (Object root : yaml.loadAll(content)) {
                     load(target, root);
@@ -65,7 +65,7 @@ class EnvironmentLoader {
     }
 
     Environment loadOne(Environment target, URL url, Yaml yaml) {
-        if (validate(target, url, yaml)) {
+        if (validateForLoad(target, url, yaml)) {
             try (InputStream content = url.openStream()) {
 
                 if (content == null) {
@@ -91,19 +91,21 @@ class EnvironmentLoader {
 
     private final Logger log = LoggerFactory.getLogger(Environment.class);
 
-    private boolean validate(Environment target, Object source, Yaml yaml) {
-        if (target == null) {
-            log.warn("Cannot load the environment into a null target reference; ignoring...");
-            return false;
-        }
+    private boolean validateForLoad(Environment target, Object source, Yaml yaml) {
         if (source == null) {
             log.warn("Cannot load the environment from a null source reference; ignoring...");
             return false;
         }
-        if (yaml == null) {
-            log.warn("Cannot load the environment using a null Yaml reference; ignoring...");
+
+        if (target == null) {
+            log.error("Cannot load the environment into a null target reference; ignoring...");
             return false;
         }
+        if (yaml == null) {
+            log.error("Cannot load the environment using a null Yaml reference; ignoring...");
+            return false;
+        }
+
         return true;
     }
 }
