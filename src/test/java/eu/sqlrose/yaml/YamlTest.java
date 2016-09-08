@@ -73,6 +73,21 @@ public class YamlTest {
         assertTrue(((List) root).contains(yamlScalar));
     }
 
+    /**
+     * Simple test template.
+     */
+    @Test
+    public void GIVEN_SomeContent_WHEN_LoadAllCalled_THEN_ReturnStructureAsExpected() {
+
+        String someContent = joln(//@fmt:off
+            "- k.0.0: v.0.0",
+            "  k.0.1: v.0.1",
+            "- k.1.0: v.1.0",
+            "  k.1.1: v.1.1");//@fmt:on
+
+        Object root = yamlUnderTest.loadAll(someContent).iterator().next();
+    }
+
     @Test
     public void GIVEN_MultipleComplexDocuments_WHEN_LoadAllCalled_THEN_ReturnStructureAsExpected() throws IOException {
 

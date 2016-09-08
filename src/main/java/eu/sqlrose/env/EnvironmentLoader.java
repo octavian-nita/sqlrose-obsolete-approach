@@ -6,6 +6,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Map;
 
 /**
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
@@ -31,21 +32,6 @@ class EnvironmentLoader {
         return target;
     }
 
-    Environment loadOne(Environment target, String content, Yaml yaml) {
-        if (validateForLoad(target, content, yaml)) {
-            try {
-                for (Object root : yaml.loadAll(content)) {
-                    load(target, root);
-                }
-            } catch (Throwable throwable) {
-                log.error(
-                    "Cannot load the environment from content " + content.substring(0, Math.min(81, content.length())) +
-                    "... (see details below); ignoring the rest of the content...", throwable);
-            }
-        }
-        return target;
-    }
-
     Environment load(URL url, URL... otherURLs) { return load(null, url, otherURLs); }
 
     Environment load(Environment target, URL url, URL... otherURLs) {
@@ -64,7 +50,23 @@ class EnvironmentLoader {
         return target;
     }
 
-    Environment loadOne(Environment target, URL url, Yaml yaml) {
+    private final Logger log = LoggerFactory.getLogger(Environment.class);
+
+    private void loadOne(Environment target, String content, Yaml yaml) {
+        if (validateForLoad(target, content, yaml)) {
+            try {
+                for (Object root : yaml.loadAll(content)) {
+                    loadRoot(target, root);
+                }
+            } catch (Throwable throwable) {
+                log.error(
+                    "Cannot load the environment from content " + content.substring(0, Math.min(81, content.length())) +
+                    "... (see details below); ignoring the rest of the content...", throwable);
+            }
+        }
+    }
+
+    private void loadOne(Environment target, URL url, Yaml yaml) {
         if (validateForLoad(target, url, yaml)) {
             try (InputStream content = url.openStream()) {
 
@@ -72,7 +74,7 @@ class EnvironmentLoader {
                     log.error("Cannot load the environment from URL " + url + " (cannot open stream); ignoring...");
                 } else {
                     for (Object root : yaml.loadAll(content)) {
-                        load(target, root);
+                        loadRoot(target, root);
                     }
                 }
 
@@ -81,15 +83,7 @@ class EnvironmentLoader {
                           " (see details below); ignoring the rest of the content...", throwable);
             }
         }
-        return target;
     }
-
-    Environment load(Environment target, Object root) {
-        // TODO: implement me!
-        return target;
-    }
-
-    private final Logger log = LoggerFactory.getLogger(Environment.class);
 
     private boolean validateForLoad(Environment target, Object source, Yaml yaml) {
         if (source == null) {
@@ -107,6 +101,33 @@ class EnvironmentLoader {
         }
 
         return true;
+    }
+
+    private void loadRoot(Environment target, Object root) {
+        if (target != null && root != null) {
+            if (root instanceof Map) {
+
+                // Data sources:
+
+                Object dsRoot = ((Map) root).get(DSS_KEY);
+                if (dsRoot != null) {
+                    loadDataSources(target, dsRoot);
+                }
+                dsRoot = ((Map) root).get(DS_KEY);
+                if (dsRoot != null) {
+                    loadDataSources(target, dsRoot);
+                }
+
+            }
+        }
+    }
+
+    private static final String DSS_KEY = "data_sources";
+
+    private static final String DS_KEY = "data_source";
+
+    private void loadDataSources(Environment target, Object dsRoot) {
+
     }
 }
 
