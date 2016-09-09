@@ -17,6 +17,6 @@ $v-font-weight: 400;
   // Selectors:
 
   html {
-    text-shadow: 0 1px 0 rgba($sh-r, $sh-g, $sh-b, $sh-a);
+    text-shadow: 0 /*1px*/ 0 6px rgba($sh-r, $sh-g, $sh-b, $sh-a);
   }
 }

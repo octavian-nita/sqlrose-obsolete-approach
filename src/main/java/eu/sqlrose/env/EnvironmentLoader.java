@@ -6,6 +6,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -127,7 +128,42 @@ class EnvironmentLoader {
     private static final String DS_KEY = "data_source";
 
     private void loadDataSources(Environment target, Object dsRoot) {
+        if (dsRoot instanceof Collection) {
+            for (Object ds : (Collection) dsRoot) {
+                loadDataSources(target, ds);
+            }
+            return;
+        }
 
+        if (dsRoot instanceof Map) {
+            // TODO: implement me
+            return;
+        }
+
+        log.error("Cannot load data source(s) from " + dsRoot + "; ignoring...");
+    }
+
+    private String text(Map<?, ?> map, Object key) {
+        Object val = map == null ? null : map.get(key);
+        return val == null ? null : val.toString().trim();
+    }
+
+    private int port(Map<?, ?> map, Object key) {
+        if (map == null) {
+            return -1;
+        }
+
+        Object val = map.get(key);
+        if (val == null) {
+            return -1;
+        }
+
+        try {
+            return Integer.parseInt(val.toString().trim());
+        } catch (NumberFormatException ex) {
+            log.error("Cannot parse a port value from " + val + "; ignoring", ex);
+            return -1;
+        }
     }
 }
 
@@ -174,21 +210,6 @@ class EnvironmentLoader {
 //                                                  .build();
 //    }
 //
-//    private static int port(JsonNode root, String path) {
-//        JsonNode node = node(root, path);
-//        return node == null ? 0 : node.asInt(0);
-//    }
-//
-//    private static String text(JsonNode root, String path) {
-//        JsonNode node = node(root, path);
-//        if (node == null) {
-//            return null;
-//        }
-//
-//        String text = node.asText();
-//        return isBlank(text) ? null : text.trim();
-//    }
-//
 //    private static Properties prop(JsonNode root, String path) {
 //        JsonNode node = node(root, path);
 //        if (node == null) {
@@ -206,12 +227,4 @@ class EnvironmentLoader {
 //        }
 //
 //        return null;
-//    }
-//
-//    private static JsonNode node(JsonNode root, String path) {
-//        if (root == null || isBlank(path)) {
-//            return null;
-//        }
-//        JsonNode node = root.path(path);
-//        return node.isNull() || node.isMissingNode() ? null : node;
 //    }

@@ -1,0 +1,24 @@
+---
+system_properties:
+  # Additional system properties (http://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html) to load at
+  # application startup (see http://docs.oracle.com/javase/8/docs/technotes/guides/net/properties.html for useful ones)
+
+  http.proxyHost:          &http_proxy_host # <value>
+  http.proxyPort:          &http_proxy_port # <value>
+  http.nonProxyHosts:      #localhost|localhost.localdomain|127.0.0.1
+  http.proxyUser:          &http_proxy_user # <value>
+  http.proxyPassword:      &http_proxy_pass # <value>
+
+  #https.proxyHost:         *http_proxy_host
+  #https.proxyPort:         *http_proxy_port
+  #https.proxyUser:         *http_proxy_user
+  #https.proxyPassword:     *http_proxy_pass
+
+  #socksProxyHost:          *http_proxy_host
+  #socksProxyPort:          *http_proxy_port
+  #java.net.socks.username: *http_proxy_user
+  #java.net.socks.password: *http_proxy_pass
+
+default_password_auth:
+  #username: *http_proxy_user
+  #password: *http_proxy_pass
