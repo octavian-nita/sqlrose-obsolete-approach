@@ -15,7 +15,7 @@ import java.util.Map;
  * The {@link #load(String, String...) loading} {@link #load(URL, URL...) capabilities} provided by default never throw
  * any exceptions; in case of invalid input or any other loading error they log and do not modify the currently loading
  * environment (<code>this</code>) with the erroneous entry. Moreover, they try to load only structures they recognize,
- * silently ignoring the rest of the content.
+ * silently ignoring the rest of the configuration content.
  *
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
  * @version 1.0, Jul 11, 2016

@@ -19,6 +19,6 @@ system_properties:
   #java.net.socks.username: *http_proxy_user
   #java.net.socks.password: *http_proxy_pass
 
-default_password_auth:
+default_authenticator:
   #username: *http_proxy_user
   #password: *http_proxy_pass

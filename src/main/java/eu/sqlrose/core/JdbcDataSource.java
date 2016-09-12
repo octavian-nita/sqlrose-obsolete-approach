@@ -1,6 +1,5 @@
 package eu.sqlrose.core;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.LoggerFactory;
 
@@ -9,6 +8,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.Properties;
+
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
@@ -24,15 +25,15 @@ public class JdbcDataSource extends DataSource {
 
     private final boolean urlPartsAvailable;
 
-    // The URL-part fields may be null / empty / 0 if the URL is provided directly.
-    // It is rather difficult to reliably parse any type of JDBC-specific URL - see
-    // for example: http://www.h2database.com/html/features.html#database_url
+    // The URL-part fields may be null or empty if the URL is directly provided.
+    // It is rather difficult to reliably parse every type of JDBC-specific URL,
+    // see for example http://www.h2database.com/html/features.html#database_url
 
     private final String dbms;
 
     private final String host;
 
-    private final int port;
+    private final Integer port;
 
     private final String dbName;
 
@@ -44,23 +45,29 @@ public class JdbcDataSource extends DataSource {
             .notBlank(builder.driverClass, "The JDBC driver class name cannot be null, empty or whitespace-only");
 
         // The db URL could be specified either wholly or by components (sub-protocol, host, port, db name, etc.):
-        if (!StringUtils.isBlank(builder.url)) {
+        if (isNotBlank(builder.url)) {
 
             this.url = builder.url;
-            this.dbms = "";
-            this.host = "";
-            this.port = 0;
-            this.dbName = "";
-            this.urlPartsAvailable = false;
+            this.dbms = null;
+            this.host = null;
+            this.port = null;
+            this.dbName = null;
+            this.urlPartsAvailable = false; // don't try to parse, it is difficult and of little value
 
-        } else if (!(StringUtils.isBlank(builder.dbms) || StringUtils.isBlank(builder.dbName)) && builder.port >= 0) {
+        } else if (isNotBlank(builder.dbms) && isNotBlank(builder.dbName)) {
 
             StringBuilder url = new StringBuilder("jdbc:").append(builder.dbms);
-            if (!StringUtils.isBlank(builder.host)) {
+            if (isNotBlank(builder.host)) {
                 url.append("//").append(builder.host);
-                if (builder.port > 0) {
+
+                if (builder.port != null) {
+                    if (builder.port < 0) {
+                        throw new IllegalArgumentException(
+                            "If specified, the database port has to be a positive integer");
+                    }
                     url.append(":").append(builder.port);
                 }
+
                 url.append("/");
             }
 
@@ -73,8 +80,7 @@ public class JdbcDataSource extends DataSource {
 
         } else {
             throw new IllegalArgumentException(
-                "Either the database URL or its protocol and name have to be specified (i.e. non-blank) and if " +
-                "specified, the port has to be a positive integer");
+                "Either the database URL or its protocol and name have to be specified (i.e. non-blank)");
         }
 
         if (builder.properties != null && !builder.properties.isEmpty()) {
@@ -89,26 +95,26 @@ public class JdbcDataSource extends DataSource {
 
     public String getDriverClass() { return driverClass; }
 
+    public Properties getProperties() { return properties; }
+
     public boolean hasUrlPartsAvailable() { return urlPartsAvailable; }
 
     public String getDbms() { return dbms; }
 
     public String getHost() { return host; }
 
-    public int getPort() { return port; }
+    public Integer getPort() { return port; }
 
     public String getDbName() { return dbName; }
-
-    public Properties getProperties() { return properties; }
 
     private transient Connection connection;
 
     @Override
-    public boolean isConnected() { return connection == null; }
+    public boolean isConnected() { return connection != null; }
 
     @Override
     public void connect() throws CannotConnectToDataSource {
-        if (connection != null) {
+        if (isConnected()) {
             LoggerFactory.getLogger(getClass()).warn("A connection to the " + getName() +
                                                      " data source has already been established;" +
                                                      " ignoring request to connect...");
@@ -116,15 +122,22 @@ public class JdbcDataSource extends DataSource {
         }
 
         try {
-            Class.forName(getDriverClass());
+            final Properties info = new Properties();
 
-            if (StringUtils.isNotBlank(getUsername())) {
-                connection = DriverManager.getConnection(getUrl(), getUsername(), getPassword());
-            } else if (getProperties() != null) {
-                connection = DriverManager.getConnection(getUrl(), getProperties());
-            } else {
-                connection = DriverManager.getConnection(getUrl());
+            Properties properties = getProperties();
+            if (properties != null && !properties.isEmpty()) {
+                info.putAll(properties);
             }
+            if (isNotBlank(getUsername())) {
+                info.put("user", getUsername());
+            }
+            if (isNotBlank(getPassword())) {
+                info.put("password", getPassword());
+            }
+
+            Class.forName(getDriverClass());
+            connection = DriverManager.getConnection(getUrl(), info);
+
         } catch (ClassNotFoundException | SQLException ex) {
             throw new CannotConnectToDataSource(this, ex);
         }
@@ -132,7 +145,7 @@ public class JdbcDataSource extends DataSource {
 
     @Override
     public void disconnect() throws CannotDisconnectFromDataSource {
-        if (connection != null) {
+        if (isConnected()) {
             try {
                 connection.close();
                 connection = null;
@@ -214,16 +227,6 @@ public class JdbcDataSource extends DataSource {
             return this;
         }
 
-        public Builder property(String name, Object value) {
-            if (name != null) {
-                if (this.properties == null) {
-                    this.properties = new Properties();
-                }
-                this.properties.put(name, value);
-            }
-            return this;
-        }
-
         /**
          * The dbms (protocol) could include an optional subsubprotocol, e.g.
          * <a href="https://db.apache.org/derby/docs/10.8/devguide/cdevdvlp17453.html">
@@ -243,9 +246,9 @@ public class JdbcDataSource extends DataSource {
             return this;
         }
 
-        private int port;
+        private Integer port;
 
-        public Builder port(int port) {
+        public Builder port(Integer port) {
             this.port = port;
             return this;
         }

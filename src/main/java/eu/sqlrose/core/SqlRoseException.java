@@ -35,7 +35,7 @@ public class SqlRoseException extends Exception {
     }
 
     /**
-     * @return failure-capturing, pertinent data / details that contributed to the exception and
+     * @return failure-capturing pertinent data / details that contributed to the exception and
      * that might be used when resolving the {@link #getCode() code} to a localized message
      */
     public Object[] getDetails() { return code == null ? new Object[]{} : new Object[]{code}; }
