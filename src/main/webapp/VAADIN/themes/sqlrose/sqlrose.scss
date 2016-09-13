@@ -1,5 +1,6 @@
 $v-font-family: 'Lato', 'Lora';
 $v-font-weight: 400;
+$v-font-size: 14px;
 
 //noinspection CssUnknownTarget
 @import '../valo/valo';
@@ -20,8 +21,14 @@ $v-font-weight: 400;
     text-shadow: 0 1px 0 rgba($sh-r, $sh-g, $sh-b, $sh-a);
   }
 
-  .v-slot-sqlr-conn {
+  .sr-selectable {
+    &:hover {
+      background: $v-selection-color;
+      cursor: $v-link-cursor;
+    }
+  }
 
-      color: (v-tint 100);
+  .sr-w-ds .v-icon {
+    padding-right: 1em;
   }
 }

@@ -2,10 +2,8 @@ package eu.sqlrose.ui;
 
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
-import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import eu.sqlrose.core.DataSource;
@@ -31,15 +29,7 @@ public class SqlRoseUI extends UI implements I18n {
 
         Environment env = VaadinSession.getCurrent().getAttribute(Environment.class);
         for (DataSource dataSource : env.getDataSources()) {
-            Label l = new Label();
-
-            l.setIcon(FontAwesome.DATABASE);
-            l.setCaption(dataSource.toString());
-
-            l.addStyleName("sqlr-conn");
-            l.addStyleName(dataSource.isConnected() ? "on" : "off");
-
-            content.addComponent(l);
+            content.addComponent(new DataSourceWidget(dataSource));
         }
 
         log.info("SqlRose UI initialized");
