@@ -5,11 +5,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The {@link #load(String, String...) loading} {@link #load(URL, URL...) capabilities} provided by default never throw
@@ -23,6 +22,60 @@ import java.util.Map;
 public class Environment implements Serializable {
 
     protected final transient Logger log = LoggerFactory.getLogger(Environment.class);
+
+    //
+    // The system-wide authenticator set through the current environment
+    //
+
+    private transient Authenticator defaultAuthenticator;
+
+    public Authenticator getDefaultAuthenticator() { return defaultAuthenticator; }
+
+    public void setDefaultAuthenticator(Authenticator defaultAuthenticator) {
+        Authenticator.setDefault(this.defaultAuthenticator = defaultAuthenticator);
+    }
+
+    public void setDefaultAuthenticator(String username, String password) {
+        setDefaultAuthenticator(new Authenticator() {
+
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password == null ? new char[]{} : password.toCharArray());
+            }
+        });
+    }
+
+    //
+    // Additional system properties set through the current environment
+    //
+
+    private final Properties systemProperties = new Properties();
+
+    /**
+     * @return only the system properties {@link #setSystemProperties(Properties) set} through <code>this</code>
+     * {@link Environment}
+     */
+    public Properties getSystemProperties() {
+        Properties prop = new Properties();
+        prop.putAll(this.systemProperties);
+        return prop; // defensive copy
+    }
+
+    public void setSystemProperties(Properties properties) {
+        this.systemProperties.clear();
+        if (properties != null) {
+            this.systemProperties.putAll(properties);
+            System.setProperties(properties);
+        }
+    }
+
+    public void setSystemProperties(Map<?, ?> properties) {
+        this.systemProperties.clear();
+        if (properties != null) {
+            this.systemProperties.putAll(properties);
+            System.setProperties(this.systemProperties);
+        }
+    }
 
     //
     // As container of DataSources

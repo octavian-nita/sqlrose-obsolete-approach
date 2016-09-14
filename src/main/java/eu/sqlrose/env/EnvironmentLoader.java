@@ -6,8 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.InputStream;
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
@@ -109,17 +107,17 @@ class EnvironmentLoader {
     }
 
     private void loadRoot(Environment target, Object root) {
-        if (target != null && root != null && root instanceof Map) {
+        if (root != null && root instanceof Map) {
 
             // Data sources (allow both a collection as well as a single element, even at the same time):
             loadDataSources(target, ((Map) root).get("data_sources"));
             loadDataSources(target, ((Map) root).get("data_source"));
 
-            // Eventual (extra) Java system properties:
-            loadSystemProperties(((Map) root).get("system_properties"));
+            // Eventual (additional) Java system properties:
+            loadSystemProperties(target, ((Map) root).get("system_properties"));
 
             // Eventual authenticator data:
-            loadDefaultAuthenticator(((Map) root).get("default_authenticator"));
+            loadDefaultAuthenticator(target, ((Map) root).get("default_authenticator"));
 
         }
     }
@@ -162,7 +160,7 @@ class EnvironmentLoader {
                                                                .build());
                     }
                 } catch (Throwable throwable) {
-                    log.error("Cannot load data source information (see details below); ignoring...", throwable);
+                    log.error("Cannot load data source " + name + " (see details below); ignoring...", throwable);
                 }
 
             }
@@ -178,11 +176,11 @@ class EnvironmentLoader {
         }
 
         log.error(
-            "Data source information has to be either a mapping of 'key: value' pairs (i.e. one data source) or a " +
-            "collection of such mappings; ignoring...");
+            "Data source specifications have to be either a mapping of 'key: value' pairs (i.e. one data source) or a" +
+            " collection of such mappings; ignoring...");
     }
 
-    private void loadSystemProperties(Object spRoot) {
+    private void loadSystemProperties(Environment target, Object spRoot) {
         if (spRoot == null) {
             return;
         }
@@ -192,17 +190,10 @@ class EnvironmentLoader {
             return;
         }
 
-        for (Map.Entry<?, ?> e : ((Map<?, ?>) spRoot).entrySet()) {
-            String k = e.getKey() == null ? "" : e.getKey().toString().trim();
-            String v = e.getValue() == null ? "" : e.getValue().toString().trim();
-
-            if (k.length() > 0 && v.length() > 0) {
-                System.setProperty(k, v);
-            }
-        }
+        target.setSystemProperties((Map) spRoot);
     }
 
-    private void loadDefaultAuthenticator(Object daRoot) {
+    private void loadDefaultAuthenticator(Environment target, Object daRoot) {
         if (daRoot == null) {
             return;
         }
@@ -212,20 +203,13 @@ class EnvironmentLoader {
             return;
         }
 
-        final String username = text((Map) daRoot, "username");
-        final String password = text((Map) daRoot, "password");
-        if (username != null && password != null) {
-            Authenticator.setDefault(new Authenticator() {
-
-                @Override
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(username, password.toCharArray());
-                }
-            });
-        }
+        target.setDefaultAuthenticator(text((Map) daRoot, "username"), text((Map) daRoot, "password"));
     }
 
-    private String text(Map<?, ?> map, Object key) {
+    // 'Helper' methods always return <code>null</code> to indicate the absence of a value!
+    // (even for empty / blank string values since we are interested only by specified values)
+
+    private static String text(Map<?, ?> map, Object key) {
         Object val = map == null ? null : map.get(key);
         if (val == null) {
             return null;
@@ -235,7 +219,7 @@ class EnvironmentLoader {
         return str.length() == 0 ? null : str;
     }
 
-    private Properties prop(Map<?, ?> map, Object key) {
+    private static Properties prop(Map<?, ?> map, Object key) {
         Object val = map == null ? null : map.get(key);
         if (val == null || !(val instanceof Map)) {
             return null;
