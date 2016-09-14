@@ -5,7 +5,6 @@ import com.vaadin.ui.Label;
 import eu.sqlrose.core.DataSource;
 
 import static com.vaadin.server.FontAwesome.DATABASE;
-import static com.vaadin.server.Sizeable.Unit.PERCENTAGE;
 import static com.vaadin.shared.ui.label.ContentMode.HTML;
 import static eu.sqlrose.ui.Style.SELECTABLE;
 import static eu.sqlrose.ui.Style.W_DATA_SOURCE;
@@ -30,8 +29,6 @@ public class DataSourceWidget extends SqlRoseComponent {
         Label label = new Label(DATABASE.getHtml() + " " + dsName, HTML);
         label.setDescription(dsDesc);
 
-        setWidth(100, PERCENTAGE);
-        style(SELECTABLE);
         setCompositionRoot(style(new HorizontalLayout(label), SELECTABLE, W_DATA_SOURCE));
     }
 }

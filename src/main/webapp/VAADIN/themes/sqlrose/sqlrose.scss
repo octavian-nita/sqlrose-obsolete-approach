@@ -23,12 +23,19 @@ $v-font-size: 14px;
 
   .sr-selectable {
     &:hover {
-      background: $v-selection-color;
+      background: darken($v-background-color, 10%);
+      color: $v-selection-color;
       cursor: $v-link-cursor;
     }
   }
 
-  .sr-w-ds .v-icon {
-    padding-right: 1em;
+  .sr-w-ds {
+    border-radius: 2px;
+    padding: 0.2em 0.5em;
+    width: 100%;
+
+    .v-icon {
+      margin-right: 1em;
+    }
   }
 }

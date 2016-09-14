@@ -16,14 +16,24 @@ public enum Style {
     // (Custom) Widgets:
     //
 
-    W_DATA_SOURCE("sr-w-ds");
+    W_DATA_SOURCE("w-ds");
+
+    public static final String PREFIX = "sr-";
 
     Style() { this(null); }
 
-    Style(String name) {
+    Style(String name) { this(PREFIX, name); }
+
+    Style(String prefix, String name) {
+        prefix = prefix == null ? "" : prefix.trim();
+
         if (name == null || (name = name.trim()).length() == 0) {
-            name = "sr-" + String.join("-", name().toLowerCase().split("_+"));
+            name = prefix + String.join("-", name().toLowerCase().split("_+"));
         }
+        if (prefix.length() != 0 && !name.startsWith(prefix)) {
+            name = prefix + name;
+        }
+
         this.name = name;
     }
 

@@ -52,7 +52,7 @@ public class Environment implements Serializable {
     private final Properties systemProperties = new Properties();
 
     /**
-     * @return only the system properties {@link #setSystemProperties(Properties) set} through <code>this</code>
+     * @return only the system properties {@link #setSystemProperties(Map) set} through <code>this</code>
      * {@link Environment}
      */
     public Properties getSystemProperties() {
@@ -61,19 +61,13 @@ public class Environment implements Serializable {
         return prop; // defensive copy
     }
 
-    public void setSystemProperties(Properties properties) {
-        this.systemProperties.clear();
-        if (properties != null) {
-            this.systemProperties.putAll(properties);
-            System.setProperties(properties);
-        }
-    }
-
     public void setSystemProperties(Map<?, ?> properties) {
         this.systemProperties.clear();
         if (properties != null) {
-            this.systemProperties.putAll(properties);
-            System.setProperties(this.systemProperties);
+            properties.entrySet().stream().filter(e -> e.getKey() != null && e.getValue() != null).forEach(e -> {
+                this.systemProperties.put(e.getKey(), e.getValue());
+                System.setProperty(e.getKey().toString(), e.getValue().toString());
+            });
         }
     }
 
