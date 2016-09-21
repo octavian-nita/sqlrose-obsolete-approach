@@ -13,18 +13,16 @@ public class SqlRoseComponent extends CustomComponent {
 
     protected <T extends Component> T style(T component, Style style, Style... otherStyles) {
         if (component != null) {
-            StringBuilder buff = new StringBuilder();
             if (style != null) {
-                buff.append(style.styleName());
+                component.addStyleName(style.styleName());
             }
             if (otherStyles != null) {
                 for (Style s : otherStyles) {
                     if (s != null) {
-                        buff.append(" ").append(s.styleName());
+                        component.addStyleName(s.styleName());
                     }
                 }
             }
-            component.addStyleName(buff.toString());
         }
 
         return component;
