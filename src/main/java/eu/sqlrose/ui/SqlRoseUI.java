@@ -9,6 +9,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import eu.sqlrose.core.DataSource;
 import eu.sqlrose.env.Environment;
+import eu.sqlrose.ui.i18n.I18n;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

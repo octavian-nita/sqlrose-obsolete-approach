@@ -1,4 +1,4 @@
-package eu.sqlrose.ui;
+package eu.sqlrose.ui.i18n;
 
 import com.vaadin.server.RequestHandler;
 import com.vaadin.server.VaadinRequest;
