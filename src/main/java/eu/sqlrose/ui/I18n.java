@@ -1,6 +1,6 @@
 package eu.sqlrose.ui;
 
-import org.apache.commons.lang3.StringUtils;
+import com.vaadin.server.VaadinSession;
 import org.slf4j.LoggerFactory;
 
 import java.text.MessageFormat;
@@ -12,19 +12,36 @@ import java.util.ResourceBundle;
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
  * @version 1.0, Jul 07, 2016
  */
-public interface I18n {
+public class I18n {
 
-    String TEXT_BUNDLE_BASE = "TextBundle";
+    protected final String bundlePrefix;
 
-    String TEXT_BUNDLE =
-        StringUtils.appendIfMissing(System.getProperty("sqlrose.l10n.prefix", "locales/").trim(), "/") +
-        TEXT_BUNDLE_BASE;
+    public I18n() { this(null); }
 
-    Locale getLocale();
+    public I18n(String bundlePrefix) {
+        if (bundlePrefix == null) {
+            bundlePrefix = System.getProperty("sqlrose.l10n.prefix", "locales/").trim();
+        } else {
+            bundlePrefix = bundlePrefix.trim();
+        }
+        if (bundlePrefix.length() > 0 && !bundlePrefix.endsWith("/")) {
+            bundlePrefix += "/";
+        }
+        this.bundlePrefix = bundlePrefix;
+    }
 
-    default String t(String key, Object... args) { return t(key, null, args); }
+    protected Locale locale;
 
-    default String t(String key, Locale locale, Object... args) {
+    public I18n setLocale(Locale locale) {
+        this.locale = locale;
+        return this;
+    }
+
+    public Locale getLocale() { return locale == null ? VaadinSession.getCurrent().getLocale() : locale; }
+
+    public String t(String key, Object... args) { return t(key, null, args); }
+
+    public String t(String key, Locale locale, Object... args) {
         if (key == null) {
             return "!?";
         }
@@ -37,7 +54,7 @@ public interface I18n {
         }
 
         try {
-            ResourceBundle bundle = ResourceBundle.getBundle(TEXT_BUNDLE, locale);
+            ResourceBundle bundle = ResourceBundle.getBundle(bundlePrefix + "Text", locale);
 
             return args == null || args.length == 0
                    ? bundle.getString(key)
@@ -45,9 +62,7 @@ public interface I18n {
 
         } catch (ClassCastException | MissingResourceException ex) {
             LoggerFactory.getLogger(getClass()).warn("Cannot translate text resource for key " + key, ex);
-
             return "!" + key;
-
         }
     }
 }

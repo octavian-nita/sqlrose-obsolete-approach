@@ -4,6 +4,7 @@ import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import eu.sqlrose.core.DataSource;
@@ -17,9 +18,20 @@ import org.slf4j.LoggerFactory;
  */
 @Theme("sqlrose")
 @PreserveOnRefresh
-public class SqlRoseUI extends UI implements I18n {
+public class SqlRoseUI extends UI {
 
     protected final Logger log = LoggerFactory.getLogger(SqlRoseUI.class);
+
+    protected final I18n i18n = new I18n();
+
+    public SqlRoseUI() {
+        setErrorHandler(new SqlRoseErrorHandler());
+    }
+
+    public SqlRoseUI(Component content) {
+        super(content);
+        setErrorHandler(new SqlRoseErrorHandler());
+    }
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -29,7 +41,8 @@ public class SqlRoseUI extends UI implements I18n {
 
         Environment env = VaadinSession.getCurrent().getAttribute(Environment.class);
         for (DataSource dataSource : env.getDataSources()) {
-            content.addComponent(new DataSourceWidget(dataSource));
+            DataSourceWidget dsw = new DataSourceWidget(dataSource);
+            content.addComponent(dsw);
         }
 
         log.info("SqlRose UI initialized");
