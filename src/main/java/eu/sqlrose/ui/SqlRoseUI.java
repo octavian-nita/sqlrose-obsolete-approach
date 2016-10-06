@@ -25,14 +25,9 @@ public class SqlRoseUI extends UI {
 
     protected final I18n i18n = new I18n();
 
-    public SqlRoseUI() {
-        setErrorHandler(new SqlRoseErrorHandler());
-    }
+    public SqlRoseUI() {}
 
-    public SqlRoseUI(Component content) {
-        super(content);
-        setErrorHandler(new SqlRoseErrorHandler());
-    }
+    public SqlRoseUI(Component content) { super(content); }
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {

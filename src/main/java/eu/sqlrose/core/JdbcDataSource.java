@@ -113,7 +113,7 @@ public class JdbcDataSource extends DataSource {
     public boolean isConnected() { return connection != null; }
 
     @Override
-    public void connect() throws CannotConnectToDataSource {
+    public synchronized void connect() throws CannotConnectToDataSource {
         if (isConnected()) {
             LoggerFactory.getLogger(getClass()).warn("A connection to the " + getName() +
                                                      " data source has already been established;" +
@@ -144,7 +144,7 @@ public class JdbcDataSource extends DataSource {
     }
 
     @Override
-    public void disconnect() throws CannotDisconnectFromDataSource {
+    public synchronized void disconnect() throws CannotDisconnectFromDataSource {
         if (isConnected()) {
             try {
                 connection.close();

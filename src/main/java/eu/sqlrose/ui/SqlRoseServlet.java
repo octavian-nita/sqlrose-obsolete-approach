@@ -71,6 +71,7 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
         session.setAttribute(Environment.class, env);
 
         session.addRequestHandler(new I18nRequestHandler());
+        session.setErrorHandler(new SqlRoseErrorHandler());
 
         log.info("SqlRose session initialized");
     }
