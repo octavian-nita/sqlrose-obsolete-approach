@@ -1,10 +1,12 @@
 package eu.sqlrose.core;
 
 /**
- * Root of the hierarchy of SQL Rose-specific exceptions. While there are
- * <a href="https://www.ibm.com/developerworks/library/j-jtp05254/">good reasons</a> to make it
+ * Root of the hierarchy of SQL Rose-specific exceptions.
+ * <p>
+ * NOTE: While there are <a href="https://www.ibm.com/developerworks/library/j-jtp05254/">good reasons</a> to make it
  * {@link Exception checked}, many (not only UI) event-based frameworks do not offer a way to propagate checked
  * exceptions out of event handlers and it's not always feasible to handle them within the handlers themselves.
+ * As such one might consider using an unchecked exception hierarchy and relying on a global / default error handler.
  *
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
  * @version 1.0, Sep 05, 2016

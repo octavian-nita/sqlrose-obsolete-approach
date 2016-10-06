@@ -2,6 +2,7 @@ package eu.sqlrose.ui;
 
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.*;
+import eu.sqlrose.core.CompositeException;
 import eu.sqlrose.env.Environment;
 import eu.sqlrose.ui.i18n.I18nRequestHandler;
 import org.slf4j.Logger;
@@ -58,17 +59,15 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
             }
 
             log.error(message, throwable);
-
-            // TODO: redirect to an error page with app restart option
         }
     }
 
     @Override
     public void sessionInit(SessionInitEvent sessionInitEvent) throws ServiceException {
-        VaadinSession session = sessionInitEvent.getSession();
+        final VaadinSession session = sessionInitEvent.getSession();
 
         Environment env = loadEnvironment();
-        // TODO: perform eventual initial configuration based on the loaded environment
+        // TODO perform eventual initial configuration based on the loaded environment
         session.setAttribute(Environment.class, env);
 
         session.addRequestHandler(new I18nRequestHandler());
@@ -84,8 +83,6 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
 
         ClassLoader ldr = VaadinService.getCurrent().getClassLoader();
         for (String res : new String[]{//@fmt:off
-
-            // TODO: consider splitting the environment into server-wide and user-specific
 
             "config.yaml",
             "config-private.yaml",
@@ -107,8 +104,16 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
 
     @Override
     public void sessionDestroy(SessionDestroyEvent sessionDestroyEvent) {
+        final VaadinSession session = sessionDestroyEvent.getSession();
 
-        // TODO: close remaining open DB connections, ensure environment changes get persisted
+        Environment env = session.getAttribute(Environment.class);
+        if (env != null) {
+            try {
+                env.cleanup();
+            } catch (CompositeException e) {
+                session.getErrorHandler().error(new ErrorEvent(e));
+            }
+        }
 
         log.info("SqlRose session destroyed");
     }

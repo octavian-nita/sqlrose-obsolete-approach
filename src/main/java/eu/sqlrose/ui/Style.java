@@ -1,6 +1,8 @@
 package eu.sqlrose.ui;
 
 /**
+ * Wraps {@link com.vaadin.ui.Component#addStyleName(String) style names}, managing common prefixes.
+ *
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
  * @version 1.0, Sep 13, 2016
  */

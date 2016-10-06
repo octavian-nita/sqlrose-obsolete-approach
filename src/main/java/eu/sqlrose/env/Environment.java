@@ -1,6 +1,8 @@
 package eu.sqlrose.env;
 
+import eu.sqlrose.core.CompositeException;
 import eu.sqlrose.core.DataSource;
+import eu.sqlrose.core.DataSource.CannotDisconnectFromDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -113,4 +115,27 @@ public class Environment implements Serializable {
     }
 
     public Environment load(URL url, URL... otherURLs) { return new EnvironmentLoader().load(this, url, otherURLs); }
+
+    //
+    // Clean up
+    //
+
+    public void cleanup() throws CompositeException {
+        CompositeException exceptions = null;
+
+        for (DataSource ds : dataSources.values()) {
+            try {
+                ds.disconnect();
+            } catch (CannotDisconnectFromDataSource ex) {
+                if (exceptions == null) {
+                    exceptions = new CompositeException();
+                }
+                exceptions.add(ex);
+            }
+        }
+
+        if (exceptions != null) {
+            throw exceptions;
+        }
+    }
 }

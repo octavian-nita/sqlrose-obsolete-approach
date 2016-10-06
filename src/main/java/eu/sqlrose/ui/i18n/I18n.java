@@ -20,7 +20,11 @@ public class I18n {
 
     public I18n(String bundlePrefix) {
         if (bundlePrefix == null) {
-            bundlePrefix = System.getProperty("sqlrose.l10n.prefix", "locales/").trim();
+            VaadinSession session = VaadinSession.getCurrent();
+            bundlePrefix = session == null
+                           ? System.getProperty("sqlrose.l10n.prefix", "locales/").trim()
+                           : session.getConfiguration()
+                                    .getApplicationOrSystemProperty("sqlrose.l10n.prefix", "locales/").trim();
         } else {
             bundlePrefix = bundlePrefix.trim();
         }
@@ -54,7 +58,7 @@ public class I18n {
         }
 
         try {
-            ResourceBundle bundle = ResourceBundle.getBundle(bundlePrefix + "Text", locale);
+            ResourceBundle bundle = ResourceBundle.getBundle(bundlePrefix + "Messages", locale);
 
             return args == null || args.length == 0
                    ? bundle.getString(key)

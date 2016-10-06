@@ -14,4 +14,6 @@ public interface ErrorCode extends Serializable {
     String getCode();
 
     ErrorCode E_GENERIC = (ErrorCode) () -> "E_GENERIC";
+
+    ErrorCode E_COMPOSITE = (ErrorCode) () -> "E_COMPOSITE";
 }
