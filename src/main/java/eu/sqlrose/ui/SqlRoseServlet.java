@@ -21,7 +21,7 @@ import java.net.URL;
  * @version 1.0, Jul 05, 2016
  */
 @WebServlet(name = "sqlrose", value = "/*", asyncSupported = true)
-@VaadinServletConfiguration(productionMode = false, ui = SqlRoseUI.class)
+@VaadinServletConfiguration(productionMode = true, ui = SqlRoseUI.class)
 public class SqlRoseServlet extends VaadinServlet implements SessionInitListener, SessionDestroyListener {
 
     static {
