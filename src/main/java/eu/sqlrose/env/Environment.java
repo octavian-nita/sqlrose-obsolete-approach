@@ -128,9 +128,10 @@ public class Environment implements Serializable {
                 ds.disconnect();
             } catch (CannotDisconnectFromDataSource ex) {
                 if (exceptions == null) {
-                    exceptions = new CompositeException();
+                    exceptions = new CompositeException(ex);
+                } else {
+                    exceptions.add(ex);
                 }
-                exceptions.add(ex);
             }
         }
 

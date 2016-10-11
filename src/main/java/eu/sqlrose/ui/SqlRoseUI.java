@@ -8,6 +8,7 @@ import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -40,19 +41,19 @@ public class SqlRoseUI extends UI {
         Responsive.makeResponsive(this);
         addStyleName(ValoTheme.UI_WITH_MENU);
 
-        // Do we need it?
-        Page.getCurrent().addBrowserWindowResizeListener((Page.BrowserWindowResizeListener) event -> {
-            // DashboardEventBus.post(new BrowserResizeEvent());
-        });
+        // Do we need something similar?
+        // Page.getCurrent().addBrowserWindowResizeListener((Page.BrowserWindowResizeListener) event -> {
+        //     DashboardEventBus.post(new BrowserResizeEvent());
+        // });
 
         updateContent();
 
-        log.info("SqlRose UI initialized");
+        log.debug("SqlRose UI initialized");
     }
 
     private void updateContent() {
-        VerticalLayout content = new VerticalLayout();
-        content.setMargin(true);
+        HorizontalLayout content = new HorizontalLayout();
+        content.setSizeFull();
         setContent(content);
 
         Environment env = VaadinSession.getCurrent().getAttribute(Environment.class);

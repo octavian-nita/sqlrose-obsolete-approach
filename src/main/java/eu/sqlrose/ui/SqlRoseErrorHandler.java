@@ -71,7 +71,7 @@ public class SqlRoseErrorHandler extends DefaultErrorHandler {
     protected void handle(Throwable throwable) {
         if (throwable == null) {
         } else {
-
+            // TODO: finish this
         }
     }
 }
