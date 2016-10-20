@@ -1,6 +1,38 @@
-$v-font-family: 'Lato', 'Lora';
+$v-font-family: /*'Source Sans Pro',*/
+  'Lato', 'Lora', sans-serif;
 $v-font-weight: 400;
 $v-font-size: 14px;
+
+/////////////////////////
+//
+// Based on Metro Valo
+// (https://github.com/vaadin/valo-demo/blob/master/src/main/webapp/VAADIN/themes/tests-valo-metro/_variables.scss)
+//
+/////////////////////////
+
+$v-app-background-color: #fff;
+$v-background-color: #eee;
+$v-focus-color: #0072c6;
+
+$v-focus-style: none; // 0 0 0 1px $v-focus-color;
+
+$valo-menu-background-color: darken($v-focus-color, 10%);
+$v-border: 0 solid v-shade;
+$v-border-radius: 0px;
+$v-bevel: false;
+$v-gradient: false;
+$v-shadow: false;
+$v-textfield-bevel: false;
+$v-textfield-shadow: false;
+$v-textfield-border: 1px solid v-shade;
+$v-link-text-decoration: none;
+$v-overlay-shadow: 0 0 0 1px #000;
+$v-overlay-border-width: 1px; // For IE8
+$v-window-shadow: $v-overlay-shadow;
+$v-selection-overlay-background-color: #fff;
+$v-selection-overlay-padding-horizontal: 0;
+$v-selection-overlay-padding-vertical: 5px;
+$v-panel-border: 1px solid v-shade;
 
 //noinspection CssUnknownTarget
 @import '../valo/valo';
@@ -13,7 +45,7 @@ $v-font-size: 14px;
   $sh-r: 0;
   $sh-g: $sh-r;
   $sh-b: $sh-r;
-  $sh-a: 0.2;
+  $sh-a: 0.1;
 
   // Selectors:
 
@@ -30,6 +62,8 @@ $v-font-size: 14px;
   }
 
   .sr-w-ds {
+    // :focus::after { box-shadow: none; }
+
     border-radius: 2px;
     padding: 0.2em 0.5em;
     width: 100%;
@@ -37,5 +71,6 @@ $v-font-size: 14px;
     .v-icon {
       margin-right: 1em;
     }
+
   }
 }

@@ -1,11 +1,13 @@
 package eu.sqlrose.ui;
 
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
+import com.vaadin.ui.UI;
 import eu.sqlrose.core.DataSource;
 
 import static com.vaadin.server.FontAwesome.DATABASE;
-import static com.vaadin.shared.ui.label.ContentMode.HTML;
+import static com.vaadin.ui.themes.ValoTheme.BUTTON_LINK;
 import static eu.sqlrose.ui.Style.SELECTABLE;
 import static eu.sqlrose.ui.Style.W_DATA_SOURCE;
 
@@ -26,9 +28,11 @@ public class DataSourceWidget extends SqlRoseComponent {
         final String dsDesc =
             dataSource == null ? "" : dataSource.getDescription() == null ? "" : dataSource.getDescription();
 
-        Label label = new Label(DATABASE.getHtml() + " " + dsName, HTML);
-        label.setDescription(dsDesc);
+        Button bt = new Button(dsName, DATABASE);
+        bt.setDescription(dsDesc);
+        bt.addStyleName(BUTTON_LINK);
+        bt.addClickListener((ClickListener) event -> {});
 
-        setCompositionRoot(style(new HorizontalLayout(label), SELECTABLE, W_DATA_SOURCE));
+        setCompositionRoot(style(new HorizontalLayout(bt), SELECTABLE, W_DATA_SOURCE));
     }
 }
