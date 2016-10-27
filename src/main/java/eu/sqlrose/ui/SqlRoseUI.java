@@ -46,7 +46,7 @@ public class SqlRoseUI extends UI {
 
         updateContent();
 
-        log.debug("SqlRose UI initialized");
+        log.debug("SQLrose UI initialized");
     }
 
     private void updateContent() {

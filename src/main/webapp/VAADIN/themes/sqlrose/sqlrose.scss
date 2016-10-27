@@ -18,7 +18,7 @@ $v-focus-style: none; // 0 0 0 1px $v-focus-color;
 
 $valo-menu-background-color: darken($v-focus-color, 10%);
 $v-border: 0 solid v-shade;
-$v-border-radius: 0px;
+$v-border-radius: 1px;
 $v-bevel: false;
 $v-gradient: false;
 $v-shadow: false;
@@ -64,7 +64,7 @@ $v-panel-border: 1px solid v-shade;
   .sr-w-ds {
     // :focus::after { box-shadow: none; }
 
-    border-radius: 2px;
+    border-radius: $v-border-radius;
     padding: 0.2em 0.5em;
     width: 100%;
 

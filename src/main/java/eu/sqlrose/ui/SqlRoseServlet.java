@@ -41,24 +41,21 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
 
     @Override
     public void service(ServletRequest request, ServletResponse response) {
+        HttpServletRequest httpRequest = (HttpServletRequest) request; // web...
+
+        String uri = httpRequest.getRequestURI();
+        String qs = httpRequest.getQueryString();
+        if (qs != null) {
+            uri += "?" + qs;
+        }
+
         try {
 
+            log.debug("*** REQ {} ***", uri);
             super.service(request, response);
 
         } catch (Throwable throwable) {
-            String message = "An error has occurred";
-
-            if (request instanceof HttpServletRequest) {
-                HttpServletRequest httpRequest = (HttpServletRequest) request;
-                message += " while servicing request " + httpRequest.getRequestURI();
-
-                String qs = httpRequest.getQueryString();
-                if (qs != null && (qs = qs.trim()).length() > 0) {
-                    message += "?" + qs;
-                }
-            }
-
-            log.error(message, throwable);
+            log.error("An error has occurred while servicing request " + uri, throwable);
         }
     }
 
@@ -73,7 +70,7 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
         session.addRequestHandler(new I18nRequestHandler());
         session.setErrorHandler(new SqlRoseErrorHandler());
 
-        log.info("SqlRose session initialized");
+        log.info("SQLrose session initialized");
     }
 
     /**
@@ -116,6 +113,6 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
             }
         }
 
-        log.info("SqlRose session destroyed");
+        log.info("SQLrose session destroyed");
     }
 }

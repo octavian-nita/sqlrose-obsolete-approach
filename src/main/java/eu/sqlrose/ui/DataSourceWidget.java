@@ -1,5 +1,6 @@
 package eu.sqlrose.ui;
 
+import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
@@ -31,7 +32,10 @@ public class DataSourceWidget extends SqlRoseComponent {
         Button bt = new Button(dsName, DATABASE);
         bt.setDescription(dsDesc);
         bt.addStyleName(BUTTON_LINK);
-        bt.addClickListener((ClickListener) event -> {});
+        bt.addClickListener((ClickListener) event -> {
+
+            Page.getCurrent().setUriFragment(dsName, false);
+        });
 
         setCompositionRoot(style(new HorizontalLayout(bt), SELECTABLE, W_DATA_SOURCE));
     }
