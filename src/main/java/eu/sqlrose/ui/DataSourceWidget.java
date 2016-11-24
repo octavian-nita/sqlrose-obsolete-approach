@@ -32,10 +32,7 @@ public class DataSourceWidget extends SqlRoseComponent {
         Button bt = new Button(dsName, DATABASE);
         bt.setDescription(dsDesc);
         bt.addStyleName(BUTTON_LINK);
-        bt.addClickListener((ClickListener) event -> {
-
-            Page.getCurrent().setUriFragment(dsName, false);
-        });
+        bt.addClickListener((ClickListener) event -> Page.getCurrent().setUriFragment(dsName));
 
         setCompositionRoot(style(new HorizontalLayout(bt), SELECTABLE, W_DATA_SOURCE));
     }
