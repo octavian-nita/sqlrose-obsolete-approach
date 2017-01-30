@@ -15,4 +15,5 @@ Track development progress on [Trello](https://trello.com/b/41G7I2lW/sqlrose).
 
 ## features(?)
 
- * persistent filters
+ * filters for database artifacts like tables, views, procedures, etc.; table rows; etc.; +persistent
+ * excludes / includes for columns (and more?); +persistent
