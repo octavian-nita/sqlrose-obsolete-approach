@@ -13,6 +13,7 @@ Track development progress on [Trello](https://trello.com/b/41G7I2lW/sqlrose).
  * [±free] https://jsplumbtoolkit.com/
  * [!free] https://www.nwoods.com/products/gojs/
  * [!new] http://www.concretejs.com/
+ * http://visjs.org/
 
 ## features(?)
 
