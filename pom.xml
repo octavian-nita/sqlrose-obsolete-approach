@@ -35,7 +35,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <vaadin.version>8.0.0</vaadin.version>
+    <vaadin.version>8.0.2</vaadin.version>
   </properties>
 
   <repositories>
@@ -243,7 +243,7 @@
         <artifactId>jetty-maven-plugin</artifactId>
         <version>9.4.2.v20170220</version>
         <configuration>
-          <scanIntervalSeconds>2</scanIntervalSeconds>
+          <scanIntervalSeconds>0</scanIntervalSeconds>
         </configuration>
       </plugin>
     </plugins>

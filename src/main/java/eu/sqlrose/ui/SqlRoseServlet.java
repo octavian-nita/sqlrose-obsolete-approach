@@ -28,7 +28,7 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
         SLF4JBridgeHandler.install();
     }
 
-    protected final Logger log = LoggerFactory.getLogger(SqlRoseServlet.class);
+    private final Logger log = LoggerFactory.getLogger(SqlRoseServlet.class);
 
     @Override
     protected void servletInitialized() throws ServletException {
