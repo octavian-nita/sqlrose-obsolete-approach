@@ -1,16 +1,15 @@
-package eu.sqlrose.ui;
+package eu.sqlrose.ui.web.vaadin;
 
 import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.UI;
 import eu.sqlrose.core.DataSource;
 
 import static com.vaadin.server.FontAwesome.DATABASE;
 import static com.vaadin.ui.themes.ValoTheme.BUTTON_LINK;
-import static eu.sqlrose.ui.Style.SELECTABLE;
-import static eu.sqlrose.ui.Style.W_DATA_SOURCE;
+import static eu.sqlrose.ui.web.vaadin.Style.SELECTABLE;
+import static eu.sqlrose.ui.web.vaadin.Style.W_DATA_SOURCE;
 
 /**
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)

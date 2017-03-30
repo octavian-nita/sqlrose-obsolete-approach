@@ -1,4 +1,4 @@
-package eu.sqlrose.ui;
+package eu.sqlrose.ui.web.vaadin;
 
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.*;
@@ -7,7 +7,6 @@ import eu.sqlrose.env.Environment;
 import eu.sqlrose.ui.i18n.I18nRequestHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -23,10 +22,6 @@ import java.net.URL;
 @WebServlet(name = "sqlrose", value = "/*", asyncSupported = true)
 @VaadinServletConfiguration(productionMode = true, ui = SqlRoseUI.class)
 public class SqlRoseServlet extends VaadinServlet implements SessionInitListener, SessionDestroyListener {
-
-    static {
-        SLF4JBridgeHandler.install();
-    }
 
     private final Logger log = LoggerFactory.getLogger(SqlRoseServlet.class);
 

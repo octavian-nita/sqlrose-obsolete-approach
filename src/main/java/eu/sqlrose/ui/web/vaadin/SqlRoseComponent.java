@@ -1,4 +1,4 @@
-package eu.sqlrose.ui;
+package eu.sqlrose.ui.web.vaadin;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;

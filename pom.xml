@@ -35,7 +35,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <vaadin.version>8.0.2</vaadin.version>
+    <vaadin.version>8.0.4</vaadin.version>
   </properties>
 
   <repositories>
@@ -68,17 +68,22 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.24</version>
+      <version>1.7.25</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-core</artifactId>
-      <version>1.2.1</version>
+      <version>1.2.2</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.2.1</version>
+      <version>1.2.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jul-to-slf4j</artifactId>
+      <version>1.7.25</version>
     </dependency>
 
     <dependency>
@@ -95,12 +100,12 @@
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
-      <version>1.4.193</version>
+      <version>1.4.194</version>
     </dependency>
     <dependency>
       <groupId>org.mariadb.jdbc</groupId>
       <artifactId>mariadb-java-client</artifactId>
-      <version>1.5.8</version>
+      <version>1.5.9</version>
     </dependency>
 
     <dependency>
@@ -110,11 +115,6 @@
       <scope>provided</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>jul-to-slf4j</artifactId>
-      <version>1.7.24</version>
-    </dependency>
     <dependency>
       <groupId>com.vaadin</groupId>
       <artifactId>vaadin-server</artifactId>
@@ -134,11 +134,6 @@
     <!--dependency>
       <groupId>org.vaadin</groupId>
       <artifactId>viritin</artifactId>
-      <version>...</version>
-    </dependency-->
-    <!--dependency>
-      <groupId>org.vaadin.addons.lazyquerycontainer</groupId>
-      <artifactId>vaadin-lazyquerycontainer</artifactId>
       <version>...</version>
     </dependency-->
   </dependencies>
@@ -243,7 +238,7 @@
         <artifactId>jetty-maven-plugin</artifactId>
         <version>9.4.2.v20170220</version>
         <configuration>
-          <scanIntervalSeconds>0</scanIntervalSeconds>
+          <scanIntervalSeconds>1</scanIntervalSeconds>
         </configuration>
       </plugin>
     </plugins>

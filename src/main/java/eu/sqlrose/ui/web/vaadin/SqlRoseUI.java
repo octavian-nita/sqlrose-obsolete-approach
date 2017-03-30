@@ -1,4 +1,4 @@
-package eu.sqlrose.ui;
+package eu.sqlrose.ui.web.vaadin;
 
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;

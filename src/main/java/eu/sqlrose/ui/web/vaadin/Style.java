@@ -1,4 +1,4 @@
-package eu.sqlrose.ui;
+package eu.sqlrose.ui.web.vaadin;
 
 /**
  * Wraps {@link com.vaadin.ui.Component#addStyleName(String) style names}, managing common prefixes.

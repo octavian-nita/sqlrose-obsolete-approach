@@ -1,4 +1,4 @@
-package eu.sqlrose.ui;
+package eu.sqlrose.ui.web.vaadin;
 
 import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.ErrorEvent;
