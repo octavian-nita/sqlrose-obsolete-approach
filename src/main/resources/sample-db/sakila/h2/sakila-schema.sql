@@ -25,20 +25,20 @@
 --
 
 CREATE TABLE actor (
-  actor_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  actor_id SMALLINT NOT NULL AUTO_INCREMENT,
   first_name VARCHAR(45) NOT NULL,
   last_name VARCHAR(45) NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,-- ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY  (actor_id),
-  KEY idx_actor_last_name (last_name)
+  PRIMARY KEY  (actor_id)
 );-- ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX idx_actor_last_name ON actor (last_name);
 
 --
 -- Table structure for table `language`
 --
 
 CREATE TABLE language (
-  language_id TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  language_id TINYINT NOT NULL AUTO_INCREMENT,
   name CHAR(20) NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,-- ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (language_id)
@@ -49,7 +49,7 @@ CREATE TABLE language (
 --
 
 CREATE TABLE country (
-  country_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  country_id SMALLINT NOT NULL AUTO_INCREMENT,
   country VARCHAR(50) NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,-- ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY  (country_id)
@@ -60,25 +60,25 @@ CREATE TABLE country (
 --
 
 CREATE TABLE city (
-  city_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  city_id SMALLINT NOT NULL AUTO_INCREMENT,
   city VARCHAR(50) NOT NULL,
-  country_id SMALLINT UNSIGNED NOT NULL,
+  country_id SMALLINT NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,-- ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY  (city_id),
-  KEY idx_fk_country_id (country_id),
   CONSTRAINT `fk_city_country` FOREIGN KEY (country_id) REFERENCES country (country_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );-- ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX idx_fk_country_id ON city (country_id);
 
 --
 -- Table structure for table `address`
 --
 
 CREATE TABLE address (
-           address_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+           address_id SMALLINT NOT NULL AUTO_INCREMENT,
            address VARCHAR(50) NOT NULL,
            address2 VARCHAR(50) DEFAULT NULL,
            district VARCHAR(20) NOT NULL,
-           city_id SMALLINT UNSIGNED NOT NULL,
+           city_id SMALLINT NOT NULL,
            postal_code VARCHAR(10) DEFAULT NULL,
            phone VARCHAR(20) NOT NULL,
   /*!50705 location GEOMETRY NOT NULL,*/
@@ -94,7 +94,7 @@ CREATE TABLE address (
 --
 
 CREATE TABLE category (
-  category_id TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  category_id TINYINT NOT NULL AUTO_INCREMENT,
   name VARCHAR(25) NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,-- ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY  (category_id)
@@ -105,9 +105,9 @@ CREATE TABLE category (
 --
 
 CREATE TABLE store (
-  store_id TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  manager_staff_id TINYINT UNSIGNED NOT NULL,
-  address_id SMALLINT UNSIGNED NOT NULL,
+  store_id TINYINT NOT NULL AUTO_INCREMENT,
+  manager_staff_id TINYINT NOT NULL,
+  address_id SMALLINT NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,-- ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY  (store_id),
   UNIQUE KEY idx_unique_manager (manager_staff_id),
@@ -120,12 +120,12 @@ CREATE TABLE store (
 --
 
 CREATE TABLE customer (
-  customer_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  store_id TINYINT UNSIGNED NOT NULL,
+  customer_id SMALLINT NOT NULL AUTO_INCREMENT,
+  store_id TINYINT NOT NULL,
   first_name VARCHAR(45) NOT NULL,
   last_name VARCHAR(45) NOT NULL,
   email VARCHAR(50) DEFAULT NULL,
-  address_id SMALLINT UNSIGNED NOT NULL,
+  address_id SMALLINT NOT NULL,
   active BOOLEAN NOT NULL DEFAULT TRUE,
   create_date DATETIME NOT NULL,
   last_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP,-- ON UPDATE CURRENT_TIMESTAMP,
@@ -142,15 +142,15 @@ CREATE TABLE customer (
 --
 
 CREATE TABLE film (
-  film_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  film_id SMALLINT NOT NULL AUTO_INCREMENT,
   title VARCHAR(255) NOT NULL,
   description TEXT DEFAULT NULL,
   release_year YEAR DEFAULT NULL,
-  language_id TINYINT UNSIGNED NOT NULL,
-  original_language_id TINYINT UNSIGNED DEFAULT NULL,
-  rental_duration TINYINT UNSIGNED NOT NULL DEFAULT 3,
+  language_id TINYINT NOT NULL,
+  original_language_id TINYINT DEFAULT NULL,
+  rental_duration TINYINT NOT NULL DEFAULT 3,
   rental_rate DECIMAL(4,2) NOT NULL DEFAULT 4.99,
-  length SMALLINT UNSIGNED DEFAULT NULL,
+  length SMALLINT DEFAULT NULL,
   replacement_cost DECIMAL(5,2) NOT NULL DEFAULT 19.99,
   rating VARCHAR(255) DEFAULT 'G',
   special_features ARRAY DEFAULT NULL,-- SET('Trailers','Commentaries','Deleted Scenes','Behind the Scenes')
@@ -169,8 +169,8 @@ CREATE TABLE film (
 --
 
 CREATE TABLE film_actor (
-  actor_id SMALLINT UNSIGNED NOT NULL,
-  film_id SMALLINT UNSIGNED NOT NULL,
+  actor_id SMALLINT NOT NULL,
+  film_id SMALLINT NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,-- ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY  (actor_id,film_id),
   KEY idx_fk_film_id (`film_id`),
@@ -183,8 +183,8 @@ CREATE TABLE film_actor (
 --
 
 CREATE TABLE film_category (
-  film_id SMALLINT UNSIGNED NOT NULL,
-  category_id TINYINT UNSIGNED NOT NULL,
+  film_id SMALLINT NOT NULL,
+  category_id TINYINT NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,-- ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (film_id, category_id),
   CONSTRAINT fk_film_category_film FOREIGN KEY (film_id) REFERENCES film (film_id) ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -240,9 +240,9 @@ CREATE TABLE film_text (
 --
 
 CREATE TABLE inventory (
-  inventory_id MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  film_id SMALLINT UNSIGNED NOT NULL,
-  store_id TINYINT UNSIGNED NOT NULL,
+  inventory_id MEDIUMINT NOT NULL AUTO_INCREMENT,
+  film_id SMALLINT NOT NULL,
+  store_id TINYINT NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,-- ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY  (inventory_id),
   -- KEY idx_fk_film_id (film_id),
@@ -256,9 +256,9 @@ CREATE TABLE inventory (
 --
 
 CREATE TABLE payment (
-  payment_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  customer_id SMALLINT UNSIGNED NOT NULL,
-  staff_id TINYINT UNSIGNED NOT NULL,
+  payment_id SMALLINT NOT NULL AUTO_INCREMENT,
+  customer_id SMALLINT NOT NULL,
+  staff_id TINYINT NOT NULL,
   rental_id INT DEFAULT NULL,
   amount DECIMAL(5,2) NOT NULL,
   payment_date DATETIME NOT NULL,
@@ -277,10 +277,10 @@ CREATE TABLE payment (
 CREATE TABLE rental (
   rental_id INT NOT NULL AUTO_INCREMENT,
   rental_date DATETIME NOT NULL,
-  inventory_id MEDIUMINT UNSIGNED NOT NULL,
-  customer_id SMALLINT UNSIGNED NOT NULL,
+  inventory_id MEDIUMINT NOT NULL,
+  customer_id SMALLINT NOT NULL,
   return_date DATETIME DEFAULT NULL,
-  staff_id TINYINT UNSIGNED NOT NULL,
+  staff_id TINYINT NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,-- ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (rental_id),
   UNIQUE KEY  (rental_date,inventory_id,customer_id),
@@ -300,13 +300,13 @@ ALTER TABLE payment ADD CONSTRAINT fk_payment_rental FOREIGN KEY (rental_id) REF
 --
 
 CREATE TABLE staff (
-  staff_id    TINYINT UNSIGNED  NOT NULL AUTO_INCREMENT,
+  staff_id    TINYINT  NOT NULL AUTO_INCREMENT,
   first_name  VARCHAR(45)       NOT NULL,
   last_name   VARCHAR(45)       NOT NULL,
-  address_id  SMALLINT UNSIGNED NOT NULL,
+  address_id  SMALLINT NOT NULL,
   picture     BLOB                       DEFAULT NULL,
   email       VARCHAR(50)                DEFAULT NULL,
-  store_id    TINYINT UNSIGNED  NOT NULL,
+  store_id    TINYINT  NOT NULL,
   active      BOOLEAN           NOT NULL DEFAULT TRUE,
   username    VARCHAR(16)       NOT NULL,
   password    VARCHAR(255)      DEFAULT NULL,
@@ -456,8 +456,8 @@ AS
 -- DELIMITER //
 --
 -- CREATE PROCEDURE rewards_report (
---     IN min_monthly_purchases TINYINT UNSIGNED
---     , IN min_dollar_amount_purchased DECIMAL(10,2) UNSIGNED
+--     IN min_monthly_purchases TINYINT
+--     , IN min_dollar_amount_purchased DECIMAL(10,2)
 --     , OUT count_rewardees INT
 -- )
 -- LANGUAGE SQL
@@ -489,7 +489,7 @@ AS
 --         Create a temporary storage area for
 --         Customer IDs.
 --     */
---     CREATE TEMPORARY TABLE tmpCustomer (customer_id SMALLINT UNSIGNED NOT NULL PRIMARY KEY);
+--     CREATE TEMPORARY TABLE tmpCustomer (customer_id SMALLINT NOT NULL PRIMARY KEY);
 --
 --     /*
 --         Find all customers meeting the
