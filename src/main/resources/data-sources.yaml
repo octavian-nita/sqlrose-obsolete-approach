@@ -4,14 +4,14 @@ data_sources:
   - name:        Sakila (H2)
     description: sqlrose sample database, based on MySQL's Sakila sample database (https://dev.mysql.com/doc/sakila/en/)
     driver:      org.h2.Driver
-    #url:        jdbc:h2:./samples/db/sakila;MODE=MySQL
+    #url:        jdbc:h2:./sample-db/sakila/h2;MODE=MySQL
     username:    guest
     password:    guest
     # Alternative configuration properties:
     dbms:        h2 # the dbms protocol could include an optional subsubprotocol
     #host:
     #port:
-    dbname:      ./samples/db/sakila
+    dbname:      ./sample-db/sakila/h2
     props:
     # The property names might be driver-specific...
       MODE:      MySQL
