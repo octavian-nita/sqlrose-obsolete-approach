@@ -84,10 +84,10 @@ CREATE TABLE address (
   /*!50705 location GEOMETRY NOT NULL,*/
            last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,-- ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY  (address_id),
-  KEY idx_fk_city_id (city_id),
   /*!50705 SPATIAL KEY `idx_location` (location),*/
   CONSTRAINT `fk_address_city` FOREIGN KEY (city_id) REFERENCES city (city_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );-- ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX idx_fk_city_id ON address (city_id);
 
 --
 -- Table structure for table `category`
@@ -110,10 +110,10 @@ CREATE TABLE store (
   address_id SMALLINT NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,-- ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY  (store_id),
-  UNIQUE KEY idx_unique_manager (manager_staff_id),
-  KEY idx_fk_address_id (address_id),
   CONSTRAINT fk_store_address FOREIGN KEY (address_id) REFERENCES address (address_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );-- ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX idx_unique_manager ON store (manager_staff_id);
+CREATE INDEX idx_fk_address_id ON store (address_id);
 
 --
 -- Table structure for table `customer`
@@ -130,12 +130,12 @@ CREATE TABLE customer (
   create_date DATETIME NOT NULL,
   last_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP,-- ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY  (customer_id),
-  KEY idx_fk_store_id (store_id),
   -- KEY idx_fk_address_id (address_id),
-  KEY idx_last_name (last_name),
   CONSTRAINT fk_customer_address FOREIGN KEY (address_id) REFERENCES address (address_id) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT fk_customer_store FOREIGN KEY (store_id) REFERENCES store (store_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );-- ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX idx_fk_store_id ON customer (store_id);
+CREATE INDEX idx_last_name ON customer (last_name);
 
 --
 -- Table structure for table `film`
@@ -156,13 +156,13 @@ CREATE TABLE film (
   special_features ARRAY DEFAULT NULL,-- SET('Trailers','Commentaries','Deleted Scenes','Behind the Scenes')
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,-- ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY  (film_id),
-  KEY idx_title (title),
-  KEY idx_fk_language_id (language_id),
-  KEY idx_fk_original_language_id (original_language_id),
   CONSTRAINT fk_film_language FOREIGN KEY (language_id) REFERENCES language (language_id) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT fk_film_language_original FOREIGN KEY (original_language_id) REFERENCES language (language_id) ON DELETE RESTRICT ON UPDATE CASCADE,
   CHECK (rating IN ('G','PG','PG-13','R','NC-17'))
 );-- ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX idx_title ON film (title);
+CREATE INDEX idx_fk_language_id ON film (language_id);
+CREATE INDEX idx_fk_original_language_id ON film (original_language_id);
 
 --
 -- Table structure for table `film_actor`
@@ -173,10 +173,10 @@ CREATE TABLE film_actor (
   film_id SMALLINT NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,-- ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY  (actor_id,film_id),
-  KEY idx_fk_film_id (`film_id`),
   CONSTRAINT fk_film_actor_actor FOREIGN KEY (actor_id) REFERENCES actor (actor_id) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT fk_film_actor_film FOREIGN KEY (film_id) REFERENCES film (film_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );-- ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX idx_fk_film_id ON film_actor (film_id);
 
 --
 -- Table structure for table `film_category`
@@ -246,10 +246,10 @@ CREATE TABLE inventory (
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,-- ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY  (inventory_id),
   -- KEY idx_fk_film_id (film_id),
-  KEY idx_store_id_film_id (store_id,film_id),
   CONSTRAINT fk_inventory_store FOREIGN KEY (store_id) REFERENCES store (store_id) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT fk_inventory_film FOREIGN KEY (film_id) REFERENCES film (film_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );-- ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX idx_store_id_film_id ON inventory (store_id,film_id);
 
 --
 -- Table structure for table `payment`
@@ -264,10 +264,10 @@ CREATE TABLE payment (
   payment_date DATETIME NOT NULL,
   last_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP,-- ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY  (payment_id),
-  KEY idx_fk_staff_id (staff_id),
-  KEY idx_fk_customer_id (customer_id),
   CONSTRAINT fk_payment_customer FOREIGN KEY (customer_id) REFERENCES customer (customer_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );-- ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX idx_fk_staff_id ON payment (staff_id);
+CREATE INDEX idx_fk_customer_id ON payment (customer_id);
 
 
 --
@@ -283,13 +283,13 @@ CREATE TABLE rental (
   staff_id TINYINT NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,-- ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (rental_id),
-  UNIQUE KEY  (rental_date,inventory_id,customer_id),
-  KEY idx_fk_inventory_id (inventory_id),
   -- KEY idx_fk_customer_id (customer_id),
   -- KEY idx_fk_staff_id (staff_id),
   CONSTRAINT fk_rental_inventory FOREIGN KEY (inventory_id) REFERENCES inventory (inventory_id) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT fk_rental_customer FOREIGN KEY (customer_id) REFERENCES customer (customer_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );-- ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX ON rental (rental_date,inventory_id,customer_id);
+CREATE INDEX idx_fk_inventory_id ON rental (inventory_id);
 
 
 ALTER TABLE payment ADD CONSTRAINT fk_payment_rental FOREIGN KEY (rental_id) REFERENCES rental (rental_id) ON DELETE SET NULL ON UPDATE CASCADE;
