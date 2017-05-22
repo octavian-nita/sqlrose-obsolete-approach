@@ -1,0 +1,11 @@
+SELECT *
+  FROM all_constraints
+ WHERE upper(constraint_type) = 'R'
+   AND r_constraint_name IN (SELECT constraint_name
+                               FROM all_constraints
+                              WHERE upper(table_name) = :rootTable
+                                AND upper(constraint_type) IN ( 'U', 'P' ))
+{{#ownerUser}}
+  AND upper(r_owner) = upper(:ownerUser)
+{{/ownerUser}}
+;

@@ -1,4 +1,4 @@
-package eu.sqlrose.samples.db;
+package eu.sqlrose.sample.db;
 
 import org.h2.tools.RunScript;
 
@@ -16,7 +16,7 @@ import java.sql.Statement;
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
  * @version 1.0, Jul 05, 2016
  */
-public class CreateSampleDb {
+public class CreateH2SampleDb {
 
     public static void main(String[] args) throws Exception {
         if (args.length == 0) {
@@ -33,7 +33,7 @@ public class CreateSampleDb {
             dbMode = "MySQL";
         }
 
-        String dbFilePrefix = "./samples/db/" + dbName;
+        String dbFilePrefix = "./sample-db/" + dbName + "/h2";
         Files.deleteIfExists(Paths.get(dbFilePrefix + ".mv.db"));
 
         String url = "jdbc:h2:" + dbFilePrefix;
