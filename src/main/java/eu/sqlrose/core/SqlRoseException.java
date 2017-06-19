@@ -18,12 +18,12 @@ public class SqlRoseException extends Exception {
     private final ErrorCode code;
 
     public SqlRoseException(ErrorCode code) {
-        super(code == null ? null : code.getCode());
+        super(code == null ? null : code.value());
         this.code = code;
     }
 
     public SqlRoseException(ErrorCode code, Throwable cause) {
-        super(code == null ? null : code.getCode(), cause);
+        super(code == null ? null : code.value(), cause);
         this.code = code;
     }
 

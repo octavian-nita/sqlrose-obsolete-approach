@@ -23,4 +23,5 @@ Track development progress on [Trello](https://trello.com/b/41G7I2lW/sqlrose).
 
  * filters for database artifacts like tables, views, procedures, etc.; table rows; etc.; +persistent
  * excludes / includes for columns (and more?); +persistent
+ * column reordering for a table (and eventually other user actions targetting usability) automatically recorded
  * quick 'SELECT DISTINCT' for a certain column

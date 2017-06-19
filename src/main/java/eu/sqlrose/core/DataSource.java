@@ -90,7 +90,7 @@ public abstract class DataSource implements Serializable {
         CANNOT_DISCONNECT;
 
         @Override
-        public String getCode() { return "E_DS_" + name(); }
+        public String value() { return "E_DS_" + name(); }
     }
 
     /**
