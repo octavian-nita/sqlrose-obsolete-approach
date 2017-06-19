@@ -15,7 +15,7 @@ import java.util.Map;
 import static org.junit.Assert.*;
 
 /**
- * Test case illustrating basic {@link Yaml} usage in SqlRose.
+ * Test case illustrating basic {@link Yaml} usage in SQLrose.
  *
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
  * @version 1.0, Aug 31, 2016
@@ -100,12 +100,12 @@ public class YamlTest {
             "",
             "---",
             "proxy:",
-            "  http:   &http",
+            "  http:   &httpAlias",
             "    host: 192.168.1.1",
             "    port: 8023",
             "    user: user",
             "    pass: pass",
-            "  https:  *http");//@fmt:on
+            "  https:  *httpAlias");//@fmt:on
 
         Iterator<?> it = yamlUnderTest.loadAll(complexYamlContent).iterator();
 
@@ -121,7 +121,7 @@ public class YamlTest {
 
     protected static final String NL = System.getProperty("line.separator", "\n");
 
-    protected String doc(String... lines) { return joln(ArrayUtils.add(lines, 0, "---")); }
+    protected String doc(String... lines) { return joln(ArrayUtils.insert(0, lines, "---")); }
 
     protected String joln(String... args) { return join(NL, args); }
 

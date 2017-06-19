@@ -19,7 +19,7 @@ Track development progress on [Trello](https://trello.com/b/41G7I2lW/sqlrose).
 
  * [SliderPanel](https://vaadin.com/directory#!addon/sliderpanel)
 
-## features(?)
+## Features(?)
 
  * filters for database artifacts like tables, views, procedures, etc.; table rows; etc.; +persistent
  * excludes / includes for columns (and more?); +persistent
