@@ -29,9 +29,9 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
     protected void servletInitialized() throws ServletException {
         super.servletInitialized();
 
-        VaadinServletService vaadinService = getService();
-        vaadinService.addSessionInitListener(this);
-        vaadinService.addSessionDestroyListener(this);
+        final VaadinServletService service = getService();
+        service.addSessionInitListener(this);
+        service.addSessionDestroyListener(this);
     }
 
     @Override

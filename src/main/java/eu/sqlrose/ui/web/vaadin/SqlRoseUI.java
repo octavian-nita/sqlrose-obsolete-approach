@@ -50,9 +50,10 @@ public class SqlRoseUI extends UI {
     }
 
     private void updateContent() {
-        HorizontalLayout content = new HorizontalLayout();
-        content.setSizeFull();
+        final HorizontalLayout content = new HorizontalLayout();
         setContent(content);
+
+        content.setSizeFull();
 
         Environment env = VaadinSession.getCurrent().getAttribute(Environment.class);
         for (DataSource dataSource : env.getDataSources()) {
