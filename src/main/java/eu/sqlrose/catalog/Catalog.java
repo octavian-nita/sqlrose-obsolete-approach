@@ -22,8 +22,20 @@ public abstract class Catalog<LM> {
 
     protected Catalog(CharSequence... terms) { this(terms == null ? null : asList(terms)); }
 
+    /**
+     * Used by {@link #lookup(CharSequence)} to determine if each character in the specified <code>pattern</code> is
+     * found sequentially within the current catalog <code>term</code>. Whether the result can be <code>null</code>
+     * and its semantics depend on the caller's (usually {@link #lookup(CharSequence)}) implementation / contract.
+     */
     protected abstract LM match(CharSequence pattern, CharSequence term);
 
+    /**
+     * The default convention is that if {@link #match(CharSequence, CharSequence) match(pattern, term)} returns
+     * <code>null</code>, then there is no match between the current catalog <code>term</code> and <code>pattern</code>.
+     *
+     * @return a {@link List} of matches (<em>best match first</em>), each of which representing a catalog term (and
+     * eventually match-associated information) that matches, to some degree, the specified <code>pattern</code>
+     */
     public List<LM> lookup(CharSequence pattern) {
         if (pattern == null) {
             return emptyList();
@@ -38,6 +50,8 @@ public abstract class Catalog<LM> {
                 }
             }
         }
+        // TODO matches.sort();
+
         return matches;
     }
 
