@@ -1,4 +1,4 @@
-package eu.sqlrose.catalog;
+package eu.sqlrose.lookup;
 
 import java.util.ArrayList;
 import java.util.Collection;

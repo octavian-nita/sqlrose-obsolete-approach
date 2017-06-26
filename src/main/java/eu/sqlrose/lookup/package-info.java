@@ -15,4 +15,4 @@
  * @see <a href="https://github.com/forrestthewoods/lib_fts/blob/master/docs/fuzzy_match.md">Fuzzy Match: A
  * Sublime Text inspired fuzzy match algorithm</a> by <em>Forrest Smith</em>
  */
-package eu.sqlrose.catalog;
+package eu.sqlrose.lookup;

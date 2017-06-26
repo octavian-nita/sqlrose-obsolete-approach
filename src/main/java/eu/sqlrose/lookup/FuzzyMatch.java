@@ -1,4 +1,4 @@
-package eu.sqlrose.catalog;
+package eu.sqlrose.lookup;
 
 import static java.util.Objects.requireNonNull;
 
