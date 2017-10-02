@@ -11,6 +11,7 @@ Track development progress on [Trello](https://trello.com/b/41G7I2lW/sqlrose).
  * nicer names for duplicated columns (i.e. 'STATUS (from T_STATUSES)' instead of 'STATUS_1', à la SQL Developer...);
  * column reordering for a table (and eventually other user actions targetting immediate usability) automatically recorded
  * quick 'SELECT DISTINCT' for a certain column
+ * automatic driver download / provisioning
 
 ## JavaScript diagramming libraries
 
