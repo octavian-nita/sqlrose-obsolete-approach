@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+
+  <property name="artifactId" value="sqlrose" />
+
   <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
     <resetJUL>true</resetJUL>
   </contextListener>
@@ -16,11 +19,11 @@
       <pattern>%date %-5level [%thread] %logger{1} [%file:%line] %msg%n</pattern>
     </encoder>
 
-    <file>sqlrose.log</file>
+    <file>${artifactId}.log</file>
 
     <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
       <!-- rollover daily -->
-      <fileNamePattern>sqlrose-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <fileNamePattern>${artifactId}-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
       <!-- each file should be at most 100MB, keep 60 days worth of history, but at most 20GB -->
       <maxFileSize>100MB</maxFileSize>
       <maxHistory>60</maxHistory>
