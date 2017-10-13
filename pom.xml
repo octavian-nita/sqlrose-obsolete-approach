@@ -4,39 +4,44 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>eu.sqlrose</groupId>
-  <artifactId>sqlrose</artifactId>
+  <properties>
+    <project.id>sqlrose</project.id>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <groupId>eu.${project.id}</groupId>
+  <artifactId>${project.id}</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <packaging>pom</packaging>
 
-  <name>sqlrose</name>
-  <url>https://github.com/octavian-nita/sqlrose</url>
+  <name>${project.id}</name>
+  <url>https://github.com/octavian-nita/${project.id}</url>
   <description>Yet another database explorer / browser... maybe a bit different? ;)</description>
-
-  <issueManagement>
-    <url>https://github.com/octavian-nita/sqlrose/issues</url>
-    <system>sqlrose Issues on GitHub</system>
-  </issueManagement>
-
-  <scm>
-    <url>https://github.com/octavian-nita/sqlrose</url>
-    <connection>scm:git:git://github.com/octavian-nita/sqlrose.git</connection>
-    <developerConnection>scm:git:git@github.com:octavian-nita/sqlrose.git</developerConnection>
-  </scm>
 
   <developers>
     <developer>
-      <email>octavian.nita@gmail.com</email>
-      <name>Octavian Nita</name>
-      <url>https://github.com/octavian-nita</url>
       <id>octavian-nita</id>
+      <name>Octavian Nita</name>
+      <email>octavian.nita@gmail.com</email>
+      <url>https://github.com/octavian-nita</url>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <timezone>+1</timezone>
     </developer>
   </developers>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <vaadin.version>8.0.6</vaadin.version>
-  </properties>
+  <issueManagement>
+    <url>https://github.com/octavian-nita/${project.id}/issues</url>
+    <system>${project.id} Issues on GitHub</system>
+  </issueManagement>
+
+  <scm>
+    <url>https://github.com/octavian-nita/${project.id}</url>
+    <connection>scm:git:git://github.com/octavian-nita/${project.id}.git</connection>
+    <developerConnection>scm:git:git@github.com:octavian-nita/${project.id}.git</developerConnection>
+  </scm>
 
   <repositories>
     <repository>
@@ -48,9 +53,59 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.12</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.25</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jul-to-slf4j</artifactId>
+        <version>1.7.25</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.2.3</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>3.6</version>
+      </dependency>
+      <dependency>
+        <groupId>org.yaml</groupId>
+        <artifactId>snakeyaml</artifactId>
+        <version>1.18</version>
+      </dependency>
+      <dependency>
+        <groupId>com.samskivert</groupId>
+        <artifactId>jmustache</artifactId>
+        <version>1.13</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+        <version>1.4.196</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mariadb.jdbc</groupId>
+        <artifactId>mariadb-java-client</artifactId>
+        <version>2.1.2</version>
+      </dependency>
+
+      <dependency>
         <groupId>com.vaadin</groupId>
         <artifactId>vaadin-bom</artifactId>
-        <version>${vaadin.version}</version>
+        <version>8.1.5</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -61,51 +116,41 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.25</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jul-to-slf4j</artifactId>
-      <version>1.7.25</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.2.3</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.6</version>
     </dependency>
     <dependency>
       <groupId>org.yaml</groupId>
       <artifactId>snakeyaml</artifactId>
-      <version>1.18</version>
     </dependency>
     <dependency>
       <groupId>com.samskivert</groupId>
       <artifactId>jmustache</artifactId>
-      <version>1.13</version>
     </dependency>
 
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
-      <version>1.4.196</version>
     </dependency>
     <dependency>
       <groupId>org.mariadb.jdbc</groupId>
       <artifactId>mariadb-java-client</artifactId>
-      <version>2.0.2</version>
     </dependency>
 
     <dependency>
@@ -131,111 +176,64 @@
       <groupId>com.vaadin</groupId>
       <artifactId>vaadin-push</artifactId>
     </dependency>
-    <!--dependency>
-      <groupId>org.vaadin</groupId>
-      <artifactId>viritin</artifactId>
-      <version>...</version>
-    </dependency-->
   </dependencies>
 
   <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.6.1</version>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.7.0</version>
+          <configuration>
+            <source>1.8</source>
+            <target>1.8</target>
+          </configuration>
+        </plugin>
 
-      <!-- Clean up also any pre-compiled themes -->
-      <!--plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clean-plugin</artifactId>
-        <version>3.0.0</version>
-        <configuration>
-          <filesets>
-            <fileset>
-              <directory>src/main/webapp/VAADIN/themes</directory>
-              <includes>
-                <include>**/styles.css</include>
-                <include>**/styles.scss.cache</include>
-              </includes>
-            </fileset>
-            <fileset>
-              <directory>src/main/webapp/VAADIN/widgetsets</directory>
-            </fileset>
-            <fileset>
-              <directory>src/main/webapp/VAADIN/gwt-unitCache</directory>
-            </fileset>
-          </filesets>
-        </configuration>
-      </plugin-->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.20.1</version>
+          <configuration>
+            <testFailureIgnore>true</testFailureIgnore>
+          </configuration>
+        </plugin>
 
-      <!-- Comment out compile-theme goal to use on-the-fly theme compilation -->
-      <!--plugin>
-        <groupId>com.vaadin</groupId>
-        <artifactId>vaadin-maven-plugin</artifactId>
-        <version>${vaadin.version}</version>
-        <configuration>
-          <webappDirectory>${basedir}/src/main/webapp/VAADIN/widgetsets</webappDirectory>
-          <hostedWebapp>${basedir}/src/main/webapp/VAADIN/widgetsets</hostedWebapp>
-          <extraJvmArgs>-Xmx512m -Xss1024k</extraJvmArgs>
-          <compileReport>true</compileReport>
-          <noServer>true</noServer>
-          <draftCompile>false</draftCompile>
-          <strict>true</strict>
-          <style>OBF</style>
-          <runTarget>http://localhost:8080/</runTarget>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>resources</goal>
-              <goal>update-theme</goal>
-              <goal>update-widgetset</goal>
-              <goal>compile</goal>
-              <goal>compile-theme</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin-->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>3.2.0</version>
+          <configuration>
+            <!-- Exclude unnecessary files generated by the GWT compiler. -->
+            <packagingExcludes>
+              WEB-INF/classes/VAADIN/gwt-unitCache/**,WEB-INF/classes/VAADIN/widgetsets/WEB-INF/**
+            </packagingExcludes>
+            <webResources>
+              <webResource>
+                <directory>${basedir}/src/main/webapp/WEB-INF</directory>
+                <includes>
+                  <include>*.xml</include>
+                </includes>
+                <targetPath>WEB-INF</targetPath>
+                <filtering>true</filtering>
+              </webResource>
+            </webResources>
+          </configuration>
+        </plugin>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
-        <version>3.1.0</version>
-        <configuration>
-          <!-- Exclude unnecessary files generated by the GWT compiler. -->
-          <packagingExcludes>
-            WEB-INF/classes/VAADIN/gwt-unitCache/**,WEB-INF/classes/VAADIN/widgetsets/WEB-INF/**
-          </packagingExcludes>
-          <webResources>
-            <webResource>
-              <directory>${basedir}/src/main/webapp/WEB-INF</directory>
-              <includes>
-                <include>*.xml</include>
-              </includes>
-              <targetPath>WEB-INF</targetPath>
-              <filtering>true</filtering>
-            </webResource>
-          </webResources>
-        </configuration>
-      </plugin>
-
-      <!-- The Jetty plugin allows us to easily test the development build by running jetty:run on the command line. -->
-      <!-- export MAVEN_OPTS="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n" & mvn -DskipTests clean install jetty:run -->
-      <!--    set MAVEN_OPTS=-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n & mvn -DskipTests clean install jetty:run -->
-      <plugin>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-maven-plugin</artifactId>
-        <version>9.4.6.v20170531</version>
-        <configuration>
-          <scanIntervalSeconds>1</scanIntervalSeconds>
-        </configuration>
-      </plugin>
-    </plugins>
+        <!-- The Jetty plugin allows us to easily test the development build by running jetty:run on the command line. -->
+        <!-- export MAVEN_OPTS="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n" & mvn -DskipTests clean install jetty:run -->
+        <!--    set MAVEN_OPTS=-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n & mvn -DskipTests clean install jetty:run -->
+        <plugin>
+          <groupId>org.eclipse.jetty</groupId>
+          <artifactId>jetty-maven-plugin</artifactId>
+          <version>9.4.7.v20170914</version>
+          <configuration>
+            <scanIntervalSeconds>1</scanIntervalSeconds>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 </project>

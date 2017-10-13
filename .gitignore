@@ -1,18 +1,18 @@
 **/.idea
 **/*.iml
 
-**/.settings
+**/.settings/
 **/.buildpath
 **/.classpath
 **/.project
 
-**/nbproject
+**/nbproject/
 **/nbactions.xml
 **/nb-configuration.xml
 
-**/bin
-**/target
-**/tmp
+**/bin/
+**/target/
+**/tmp/
 
 **/*.log*
 
@@ -24,3 +24,5 @@
 
 **/*[._-]private.*
 **/*[._-]local.*
+
+**/node_modules/
