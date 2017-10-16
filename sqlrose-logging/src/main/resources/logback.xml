@@ -31,6 +31,7 @@
     </rollingPolicy>
   </appender>
 
+  <!-- TODO Allow specifying the level at build time by 'filtering' with the Maven resources plugin.  -->
   <root level="debug">
     <appender-ref ref="STDOUT" />
     <appender-ref ref="LOGOUT" />

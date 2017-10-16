@@ -77,10 +77,10 @@ public class SqlRoseServlet extends VaadinServlet implements SessionInitListener
         ClassLoader ldr = VaadinService.getCurrent().getClassLoader();
         for (String res : new String[]{//@fmt:off
 
-            "config.yaml",
-            "config-private.yaml",
-            "data-sources.yaml",
-            "data-sources-private.yaml" //@fmt:on
+            "src/main/resources/config.yaml",
+            "src/main/resources/config-private.yaml",
+            "src/main/resources/data-sources.yaml",
+            "src/main/resources/data-sources-private.yaml" //@fmt:on
 
         }) {
             URL url = ldr.getResource(res);
