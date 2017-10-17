@@ -47,6 +47,8 @@
     <module>sqlrose-config</module>
     <module>sqlrose-core</module>
     <module>sqlrose-webapp</module>
+    <module>sqlrose-cache</module>
+    <module>sqlrose-samples</module>
   </modules>
 
   <dependencyManagement>

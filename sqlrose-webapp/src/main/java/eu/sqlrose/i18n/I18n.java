@@ -1,6 +1,5 @@
-package eu.sqlrose.ui.i18n;
+package eu.sqlrose.i18n;
 
-import com.vaadin.server.VaadinSession;
 import org.slf4j.LoggerFactory;
 
 import java.text.MessageFormat;
@@ -14,34 +13,33 @@ import java.util.ResourceBundle;
  */
 public class I18n {
 
+    protected Locale locale;
+
     protected final String bundlePrefix;
 
-    public I18n() { this(null); }
+    public I18n() { this(null, null); }
 
     public I18n(String bundlePrefix) {
-        if (bundlePrefix == null) {
-            VaadinSession session = VaadinSession.getCurrent();
-            bundlePrefix = session == null
-                           ? System.getProperty("sqlrose.l10n.prefix", "locales/").trim()
-                           : session.getConfiguration()
-                                    .getApplicationOrSystemProperty("sqlrose.l10n.prefix", "locales/").trim();
-        } else {
-            bundlePrefix = bundlePrefix.trim();
-        }
+        this(bundlePrefix, null);
+    }
+
+    public I18n(String bundlePrefix, Locale locale) {
+        bundlePrefix =
+            bundlePrefix == null ? System.getProperty("sqlrose.l10n.prefix", "locales/").trim() : bundlePrefix.trim();
         if (bundlePrefix.length() > 0 && !bundlePrefix.endsWith("/")) {
             bundlePrefix += "/";
         }
+
         this.bundlePrefix = bundlePrefix;
+        this.locale = locale == null ? Locale.getDefault() : locale;
     }
 
-    protected Locale locale;
+    public Locale getLocale() { return locale; }
 
     public I18n setLocale(Locale locale) {
-        this.locale = locale;
+        this.locale = locale == null ? Locale.getDefault() : locale;
         return this;
     }
-
-    public Locale getLocale() { return locale == null ? VaadinSession.getCurrent().getLocale() : locale; }
 
     public String t(String key, Object... args) { return t(key, null, args); }
 
@@ -58,7 +56,7 @@ public class I18n {
         }
 
         try {
-            ResourceBundle bundle = ResourceBundle.getBundle(bundlePrefix + "Messages", locale);
+            final ResourceBundle bundle = ResourceBundle.getBundle(bundlePrefix + "Messages", locale);
 
             return args == null || args.length == 0
                    ? bundle.getString(key)

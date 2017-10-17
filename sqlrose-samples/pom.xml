@@ -9,19 +9,14 @@
     <artifactId>sqlrose</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>sqlrose-webapp</artifactId>
+  <artifactId>sqlrose-samples</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <packaging>jar</packaging>
 
   <dependencies>
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>sqlrose-logging</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
     </dependency>
   </dependencies>
 
