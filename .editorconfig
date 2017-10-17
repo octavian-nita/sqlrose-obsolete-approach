@@ -4,7 +4,7 @@
 # Top-most EditorConfig file
 root = true
 
-# Defaults [*.{xhtml,html,xml,css,scss,sass,less,js,ts,hbs,mustache,json,yaml,yml,sql,php,py,rb,go}]... etc.
+# Defaults [*.{xhtml,html,xml,css,scss,sass,less,js,ts,hbs,mustache,json,yaml,yml,sql,java,kt,kts,groovy,gradle,clj,cljs,cljc,edn,php,py,rb,go}]... etc.
 [*]
 charset = utf-8
 indent_size = 2
@@ -13,17 +13,14 @@ max_line_length = 120
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.{java,kt,kts,groovy,gradle,clj,cljs,cljc,edn}]
-charset = utf-16
-
 [*.{java,kt,kts,groovy,gradle,php,py}]
 indent_size = 4
 
-# Go
+# Idiomatic Go...
 [*.go]
 indent_style = tab
 tab_width = 8
 
-# Handlebars templates
+# Mustache and Handlebars templates are usually to be taken literally...
 [*.{hbs,mustache}]
 insert_final_newline = false
