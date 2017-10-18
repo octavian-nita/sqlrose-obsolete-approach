@@ -58,6 +58,17 @@ public class SoftCache<K, V> {
         }
     }
 
+    public boolean contains(K key) { return cache().containsKey(key); }
+
+    public int size() {
+        Map<K, V> cache = cacheRef == null ? null : cacheRef.get();
+        return cache == null ? 0 : cache.size();
+    }
+
+    public int maxSize() { return maxSize; }
+
+    public boolean isFull() { return size() == maxSize(); }
+
     public void clear() {
         lock.lock();
         try {
@@ -66,13 +77,6 @@ public class SoftCache<K, V> {
             lock.unlock();
         }
     }
-
-    public int size() {
-        Map<K, V> cache = cacheRef == null ? null : cacheRef.get();
-        return cache == null ? 0 : cache.size();
-    }
-
-    public int maxSize() { return maxSize; }
 
     /**
      * Provides convenient access to the backing {@link Map structure} that holds actual data. It is not required that
