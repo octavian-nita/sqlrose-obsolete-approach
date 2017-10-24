@@ -20,6 +20,8 @@ public final class MemoizedBiFn<T, U, R> implements BiFunction<T, U, R> {
         this.cache = new SoftCache<>(maxMemoized);
     }
 
+    public void clearCache() { cache.clear(); }
+
     @Override
     public R apply(T t, U u) { return cache.getOrCompute(Pair.of(t, u), tAndU -> delegate.apply(t, u)); }
 

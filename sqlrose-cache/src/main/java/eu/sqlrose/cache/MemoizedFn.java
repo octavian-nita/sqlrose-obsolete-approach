@@ -20,6 +20,8 @@ public final class MemoizedFn<T, R> implements Function<T, R> {
         this.cache = new SoftCache<>(maxMemoized);
     }
 
+    public void clearCache() { cache.clear(); }
+
     @Override
     public R apply(T t) { return cache.getOrCompute(t, delegate); }
 
