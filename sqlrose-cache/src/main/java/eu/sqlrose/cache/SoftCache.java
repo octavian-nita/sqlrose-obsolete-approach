@@ -27,7 +27,7 @@ import java.util.function.Function;
  */
 public class SoftCache<K, V> {
 
-    protected static final int DEFAULT_MAX_SIZE = 8192;
+    protected static final int DEFAULT_MAX_SIZE = 4096;
 
     protected transient SoftReference<Map<K, V>> cacheRef;
 
