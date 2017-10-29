@@ -1,4 +1,4 @@
-package eu.sqlrose.cache;
+package eu.fuss4j.cache;
 
 import org.junit.*;
 

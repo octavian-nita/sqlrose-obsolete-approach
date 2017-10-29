@@ -9,9 +9,14 @@
     <artifactId>sqlrose</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>sqlrose-cache</artifactId>
+  <groupId>eu.fuss4j</groupId>
+  <artifactId>fuss4j-cache</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
+
+  <name>fuss4j-cache</name>
+  <url>https://github.com/octavian-nita/sqlrose/tree/master/fuss4j-cache</url>
+  <description>(Very) Simple in-memory / in-process / application lightweight caching</description>
 
   <dependencies>
     <dependency>

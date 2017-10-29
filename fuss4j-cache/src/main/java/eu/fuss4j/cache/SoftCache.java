@@ -1,4 +1,4 @@
-package eu.sqlrose.cache;
+package eu.fuss4j.cache;
 
 import java.lang.ref.SoftReference;
 import java.util.LinkedHashMap;
@@ -8,15 +8,15 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 
 /**
- * A poor man's <strong>bounded</strong> cache that:
+ * A poor man's <strong>bounded</strong> cache with a <em>minimal interface</em> that:
  * <ul>
  * <li>is thread-safe (concurrent)</li>
- * <li>uses a {@link SoftReference}-wrapped {@link Map} instance as the backing structure to hold actual data; whether
- * or not <code>null</code> is allowed as key depends on the {@link Map} instance which can be customized by overriding
- * {@link #createBoundedCache(int)}</li>
+ * <li>uses a {@link SoftReference}-wrapped {@link Map} instance as the backing structure to hold actual data;
+ * whether or not {@code null} keys are allowed depends on the {@link Map} instance which can be customized by
+ * overriding {@link #createBoundedCache(int)}</li>
  * </ul>
- * By default the {@link Map} instance is a custom {@link LinkedHashMap} which allows <code>null</code> as key and
- * implements a basic <a href="https://en.wikipedia.org/wiki/Cache_replacement_policies#LRU">LRU algorithm</a>.
+ * By default, a custom {@link LinkedHashMap} instance is used which allows {@code null} keys and implements a
+ * basic <a href="https://en.wikipedia.org/wiki/Cache_replacement_policies#LRU">LRU algorithm</a>.
  *
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
  * @version 1.1, Oct 17, 2017
@@ -27,7 +27,7 @@ import java.util.function.Function;
  */
 public class SoftCache<K, V> {
 
-    protected static final int DEFAULT_MAX_SIZE = 4096;
+    protected static final int DEFAULT_MAX_SIZE = 1024;
 
     protected transient SoftReference<Map<K, V>> cacheRef;
 
@@ -36,7 +36,7 @@ public class SoftCache<K, V> {
     protected final Lock lock;
 
     /**
-     * @implSpec Equivalent to calling <code>new SoftCache({@link #DEFAULT_MAX_SIZE})</code>.
+     * @implSpec Equivalent to calling '{@code new SoftCache({@link #DEFAULT_MAX_SIZE})}'.
      */
     public SoftCache() { this(DEFAULT_MAX_SIZE); }
 
