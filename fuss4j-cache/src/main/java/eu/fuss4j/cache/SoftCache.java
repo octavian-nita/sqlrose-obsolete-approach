@@ -35,9 +35,7 @@ public class SoftCache<K, V> {
 
     protected final ReadWriteLock rwLock;
 
-    /**
-     * @implSpec Equivalent to calling '{@code new SoftCache({@link #DEFAULT_MAX_SIZE})}'.
-     */
+    /** Equivalent to calling '{@code new SoftCache({@link #DEFAULT_MAX_SIZE})}'. */
     public SoftCache() { this(DEFAULT_MAX_SIZE); }
 
     public SoftCache(int maxSize) {
