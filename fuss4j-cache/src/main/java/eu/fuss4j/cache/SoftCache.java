@@ -3,8 +3,8 @@ package eu.fuss4j.cache;
 import java.lang.ref.SoftReference;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Function;
 
 /**
@@ -33,7 +33,7 @@ public class SoftCache<K, V> {
 
     protected final int maxSize;
 
-    protected final Lock lock;
+    protected final ReadWriteLock rwLock;
 
     /**
      * @implSpec Equivalent to calling '{@code new SoftCache({@link #DEFAULT_MAX_SIZE})}'.
@@ -45,20 +45,36 @@ public class SoftCache<K, V> {
             throw new IllegalArgumentException("Maximum cache size must be greater than 0");
         }
         this.maxSize = maxSize;
-        this.lock = new ReentrantLock();
+        this.rwLock = new ReentrantReadWriteLock();
         this.cacheRef = new SoftReference<>(createBoundedCache(this.maxSize));
     }
 
     public V getOrCompute(K key, Function<? super K, ? extends V> mappingFn) {
-        lock.lock();
+        rwLock.writeLock().lock();
         try {
             return cache().computeIfAbsent(key, mappingFn);
         } finally {
-            lock.unlock();
+            rwLock.writeLock().unlock();
         }
     }
 
-    public boolean contains(K key) { return cache().containsKey(key); }
+    public V get(K key) {
+        rwLock.readLock().lock();
+        try {
+            return cache().get(key);
+        } finally {
+            rwLock.readLock().unlock();
+        }
+    }
+
+    public void clear() {
+        rwLock.writeLock().lock();
+        try {
+            cacheRef = null;
+        } finally {
+            rwLock.writeLock().unlock();
+        }
+    }
 
     public int size() {
         Map<K, V> cache = cacheRef == null ? null : cacheRef.get();
@@ -69,14 +85,7 @@ public class SoftCache<K, V> {
 
     public boolean isFull() { return size() == maxSize(); }
 
-    public void clear() {
-        lock.lock();
-        try {
-            cacheRef = null;
-        } finally {
-            lock.unlock();
-        }
-    }
+    public boolean contains(K key) { return cache().containsKey(key); }
 
     /**
      * Provides convenient access to the backing {@link Map structure} that holds actual data. It is not required that

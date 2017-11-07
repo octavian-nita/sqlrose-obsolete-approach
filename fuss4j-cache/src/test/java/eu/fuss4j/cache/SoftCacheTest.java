@@ -23,7 +23,7 @@ public class SoftCacheTest {
     @SuppressWarnings("unchecked")
     public void setUp() {
         cacheUnderTest = new SoftCache<>(setUpBound);
-        computation = mock(Function.class, RETURNS_DEEP_STUBS);
+        computation = mock(Function.class);
     }
 
     @After
@@ -44,58 +44,71 @@ public class SoftCacheTest {
         final String res = "res";
 
         when(computation.apply(arg)).thenReturn(res);
-        final String cachedRes = cacheUnderTest.getOrCompute(arg, computation);
+        cacheUnderTest.getOrCompute(arg, computation);
 
         verify(computation, description("getOrCompute() should invoke the computation once")).apply(arg);
         assertEquals("Cache should store 1 entry", 1, cacheUnderTest.size());
-        assertEquals("Cache should store computed value", res, cachedRes);
+        assertEquals("Cache should store computed value", res, cacheUnderTest.get(arg));
     }
 
     @Test
-    public void getOrCompute_KeyTwiceGiven_ShouldNotComputeTwice() {
+    public void getOrCompute_KeyTwiceGiven_ShouldComputeOnlyOnce() {
         final String arg = "arg";
         final String res = "res";
 
         when(computation.apply(arg)).thenReturn(res);
-        final String cachedRes1 = cacheUnderTest.getOrCompute(arg, computation);
-        final String cachedRes2 = cacheUnderTest.getOrCompute(arg, computation);
+        cacheUnderTest.getOrCompute(arg, computation);
+        cacheUnderTest.getOrCompute(arg, computation);
 
         verify(computation, description("getOrCompute() should invoke the computation only once")).apply(arg);
         assertEquals("Cache should store 1 entry", 1, cacheUnderTest.size());
-        assertEquals("Cache should store computed value", res, cachedRes1);
-        assertEquals("Cache should retrieve computed value", res, cachedRes2);
+        assertEquals("Cache should store and retrieve computed value", res, cacheUnderTest.get(arg));
     }
 
     @Test
     public void getOrCompute_NewKeyGivenWhenFull_ShouldRemoveLRUEntry() {
-        /*final String key1 = "key #1";
-        final String key2 = "key #2";
-        final String key3 = "key #3";
-        final String value1 = computation.apply(key1);
-        final String value2 = computation.apply(key2);
-        final String value3 = computation.apply(key3);
 
-        final String value1Cached = cacheUnderTest.getOrCompute(key1, computation);
-        final String value2Cached = cacheUnderTest.getOrCompute(key2, computation);
+        // Fixture
 
-        assertEquals("Cache should store 2 entry", 2, cacheUnderTest.size());
+        String arg0 = "", argNMin1 = "", resNMin1 = "", argN = "", resN = "";
+        for (int i = 0; i <= setUpBound; i++) {
+
+            String arg = "arg-" + i, res = "res-" + i;
+            when(computation.apply(arg)).thenReturn(res);
+
+            switch (i) {
+            case 0:
+                arg0 = arg;
+                break;
+            case setUpBound - 1:
+                argNMin1 = arg;
+                resNMin1 = res;
+                break;
+            case setUpBound:
+                argN = arg;
+                resN = res;
+                break;
+            }
+        }
+
+        // Exercise
+
+        for (int i = 0; i <= setUpBound; i++) {
+            cacheUnderTest.getOrCompute("arg-" + i, computation);
+        }
+
+        // Assert / Verify
+
+        assertEquals("Cache should store " + setUpBound + " entries", setUpBound, cacheUnderTest.size());
         assertTrue("Cache should report as being full", cacheUnderTest.isFull());
 
-        assertTrue("Cache should contain given key", cacheUnderTest.contains(key1));
-        assertEquals("Cache should store computed value", value1, value1Cached);
+        assertFalse("Cache should NOT contain first key given", cacheUnderTest.contains(arg0));
+        assertNull("Cache should NOT store first computed value", cacheUnderTest.get(arg0));
 
-        assertTrue("Cache should contain given key", cacheUnderTest.contains(key2));
-        assertEquals("Cache should store computed value", value2, value2Cached);
+        assertTrue("Cache should contain key N-1", cacheUnderTest.contains(argNMin1));
+        assertEquals("Cache should store value N-1", resNMin1, cacheUnderTest.get(argNMin1));
 
-        final String value3Cached = cacheUnderTest.getOrCompute(key3, computation);
-
-        assertEquals("Cache should still store 2 entry", 2, cacheUnderTest.size());
-        assertTrue("Cache should still report as being full", cacheUnderTest.isFull());
-
-        assertTrue("Cache should contain the latest given key", cacheUnderTest.contains(key3));
-        assertEquals("Cache should store the latest computed value", value3, value3Cached);
-
-        assertFalse("Cache should have removed the LRU / eldest entry", cacheUnderTest.contains(key1));
-        assertEquals("getOrCompute() should invoke the computation for new keys", 6, computation.getCallCount());*/
+        assertTrue("Cache should contain last key given", cacheUnderTest.contains(argN));
+        assertEquals("Cache should store last computed value", resN, cacheUnderTest.get(argN));
     }
 }
