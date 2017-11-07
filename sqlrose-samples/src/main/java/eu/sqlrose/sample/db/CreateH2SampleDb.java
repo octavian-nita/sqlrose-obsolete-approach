@@ -2,15 +2,10 @@ package eu.sqlrose.sample.db;
 
 import org.h2.tools.RunScript;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.Reader;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
