@@ -1,7 +1,7 @@
 package eu.sqlrose.core;
 
 /**
- * Root of the hierarchy of SQL Rose-specific exceptions.
+ * Root of the hierarchy of SQLrose-specific exceptions.
  * <p>
  * NOTE: While there are <a href="https://www.ibm.com/developerworks/library/j-jtp05254/">good reasons</a> to make it
  * {@link Exception checked}, many (not only UI) event-based frameworks do not offer a way to propagate checked
