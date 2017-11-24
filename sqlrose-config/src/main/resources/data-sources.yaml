@@ -1,5 +1,5 @@
 ---
-data_sources:
+dataSources:
   # Available data sources are identified by name
   - name:        Sakila (H2)
     description: sqlrose sample database, based on MySQL's Sakila sample database (https://dev.mysql.com/doc/sakila/en/)

@@ -1,4 +1,4 @@
-package eu.sqlrose.core;
+package eu.sqlrose.core.error;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package eu.sqlrose.core;
+package eu.sqlrose.core.error;
 
 /**
  * Root of the hierarchy of SQLrose-specific exceptions.
@@ -11,7 +11,7 @@ package eu.sqlrose.core;
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
  * @version 1.0, Sep 05, 2016
  */
-public class SqlRoseException extends Exception {
+public class SqlRoseException extends RuntimeException {
 
     private boolean internal;
 
@@ -27,7 +27,6 @@ public class SqlRoseException extends Exception {
         this.code = code;
     }
 
-    /** @see {@link ErrorCode} */
     public ErrorCode getCode() { return code; }
 
     /**
