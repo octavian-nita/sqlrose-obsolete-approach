@@ -23,11 +23,11 @@ public final class CompositeException extends SqlRoseException implements Iterab
         super(ErrorCode.E_COMPOSITE);
 
         if (exceptions == null) {
-            this.exceptions.add(new NullPointerException("exceptions was null"));
+            this.exceptions.add(new NullPointerException("no cause exceptions provided"));
         } else {
             for (Throwable exception : exceptions) {
                 if (exception == null) {
-                    this.exceptions.add(new NullPointerException("throwable was null"));
+                    this.exceptions.add(new NullPointerException("null cause provided"));
                 } else if (exception instanceof CompositeException) {
                     this.exceptions.addAll(((CompositeException) exception).exceptions);
                 } else {

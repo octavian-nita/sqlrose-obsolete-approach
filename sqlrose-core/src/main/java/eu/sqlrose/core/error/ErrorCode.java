@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Error code that can be resolved to a localized message when displaying the error, etc.
+ * Error code whose {@link #getValue() value} can be resolved to a localized message when displaying the error, etc.
  *
  * @author Octavian Theodor NITA (https://github.com/octavian-nita/)
- * @version 1.0, Sep 05, 2016
+ * @version 1.1, Nov 27, 2017
  */
 public class ErrorCode implements Serializable {
 
@@ -21,10 +21,10 @@ public class ErrorCode implements Serializable {
 
     public ErrorCode(String value) { this.value = Objects.requireNonNull(value, "Cannot use null as error code"); }
 
-    public String value() { return value; }
+    public String getValue() { return value; }
 
     @Override
-    public String toString() { return value(); }
+    public String toString() { return getValue(); }
 
     @Override
     public boolean equals(Object o) {
